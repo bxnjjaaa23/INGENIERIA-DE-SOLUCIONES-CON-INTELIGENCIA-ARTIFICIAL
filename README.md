@@ -1,4 +1,4 @@
-# AutoTech JPB Solutions - Copiloto RAG Multimarca & Agente de Inventario 🚗⚡
+# AutoTech JPB Solutions - Copiloto RAG Multimarca & Agente de Inventario 🚗
 
 [![Duoc UC](https://img.shields.io/badge/Duoc_UC-ISY0101-blue.svg)](https://www.duoc.cl)
 [![Python](https://img.shields.io/badge/Python-3.10+-yellow.svg)](https://www.python.org)
@@ -7,26 +7,20 @@
 [![FAISS](https://img.shields.io/badge/VectorStore-FAISS-green.svg)](https://github.com/facebookresearch/faiss)
 
 ---
-
-> **Asignatura:** ISY0101 - Ingeniería de Soluciones con Inteligencia Artificial  
 > **Institución:** Duoc UC  
-> **Evaluación:** Evaluación Parcial N°1 (Encargo con Presentación - 30%)  
-> **Integrantes del Equipo:** Paolo, Benjamín y José  
-> **Fecha:** Septiembre 2026  
-
+> **Integrantes del Equipo:** Paolo Jorquera, Benjamín Arriaza y José Castillo  
 ---
 
-## 📌 Tabla de Contenidos
+##  Tabla de Contenidos
 - [1. Descripción del Proyecto](#1-descripción-del-proyecto)
 - [2. Cuellos de Botella Organizacionales y Solución](#2-cuellos-de-botella-organizacionales-y-solución)
 - [3. Características Clave](#3-características-clave)
-- [4. Arquitectura de la Solución](#4-arquitectura-de-la-solución)
-- [5. Manuales Técnicos Indexados en RAG](#5-manuales-técnicos-indexados-en-rag)
-- [6. Estructura del Proyecto](#6-estructura-del-proyecto)
-- [7. Guía de Ejecución en Google Colab](#7-guía-de-ejecución-en-google-colab)
-- [8. Guía de Ejecución en Entorno Local](#8-guía-de-ejecución-en-entorno-local)
-- [9. Batería de Pruebas y Resultados](#9-batería-de-pruebas-y-resultados)
-- [10. Declaración de Autoría y Reflexiones](#10-declaración-de-autoría-y-reflexiones)
+- [4. Manuales Técnicos Indexados en RAG](#5-manuales-técnicos-indexados-en-rag)
+- [5. Estructura del Proyecto](#6-estructura-del-proyecto)
+- [6. Guía de Ejecución en Google Colab](#7-guía-de-ejecución-en-google-colab)
+- [7. Guía de Ejecución en Entorno Local](#8-guía-de-ejecución-en-entorno-local)
+- [8. Batería de Pruebas y Resultados](#9-batería-de-pruebas-y-resultados)
+- [9. Declaración de Autoría y Reflexiones](#10-declaración-de-autoría-y-reflexiones)
 
 ---
 
@@ -50,64 +44,32 @@ Para optimizar la operación y reducir tiempos de respuesta, se desarrolló **Au
 
 ## 3. Características Clave
 
-- 📚 **RAG Multimarca sobre 5 Manuales PDF:** Indexación semántica usando `SentenceTransformers` (`all-MiniLM-L6-v2`) y `FAISS`.
-- 🛠️ **Agente con Tool Calling (`consultar_inventario`):** Permite al LLM consultar stock general, categorías o repuestos específicos en CLP y su ubicación física.
-- ⚡ **Caché Persistente en Disco (< 0.1s de Carga):** Almacenamiento optimizado `.pkl` que elimina la re-indexación de PDFs en cada inicio.
-- ☁️ **Integración Automática con Google Drive:** Auto-descarga desde enlaces públicos de Google Drive (`gdown`) o desde la carpeta montada en `/content/drive/MyDrive/AutoTech_Manuales`.
-- 🎨 **Interfaz Conversacional Cyber-Glow en Streamlit:** UI animada con diseño moderno, badges de herramientas y detalles expandibles de fuentes.
-- 🔄 **Fallback de Modelos en Groq API:** Soporte resiliente con cambio automático entre `llama-3.3-70b-versatile`, `llama-3.1-8b-instant`, y otros.
+-  **RAG Multimarca sobre 5 Manuales PDF:** Indexación semántica usando `SentenceTransformers` (`all-MiniLM-L6-v2`) y `FAISS`.
+-  **Agente con Tool Calling (`consultar_inventario`):** Permite al LLM consultar stock general, categorías o repuestos específicos en CLP y su ubicación física.
+-  **Caché Persistente en Disco (< 0.1s de Carga):** Almacenamiento optimizado `.pkl` que elimina la re-indexación de PDFs en cada inicio.
+-   **Integración Automática con Google Drive:** Auto-descarga desde enlaces públicos de Google Drive (`gdown`) o desde la carpeta montada en `/content/drive/MyDrive/AutoTech_Manuales`.
+-  **Interfaz Conversacional Cyber-Glow en Streamlit:** UI animada con diseño moderno, badges de herramientas y detalles expandibles de fuentes.
+-  **Fallback de Modelos en Groq API:** Soporte resiliente con cambio automático entre `llama-3.3-70b-versatile`, `llama-3.1-8b-instant`, y otros.
 
 ---
 
-## 4. Arquitectura de la Solución
+## 4. Manuales Técnicos Indexados en RAG
 
-```mermaid
-flowchart TD
-    User[👨‍🔧 Mecánico / 👤 Cliente / 👨‍💼 Recepcionista] -->|Consulta en Lenguaje Natural| UI[🖥️ Streamlit Frontend]
-    UI -->|Query + Historial| Agent[🧠 Orquestador LLM Groq - AutoTechAgent]
-    
-    subgraph RAG Pipeline - 5 Manuales PDF & Embeddings
-        D[5 PDFs Manuales de Taller] -->|PyPDF + Chunking 600c| E[Chunks Texto]
-        E -->|SentenceTransformers all-MiniLM-L6-v2| F[Embeddings 384d]
-        F --> G[(VectorStore FAISS + Caché .pkl)]
-        G -->|Búsqueda Semántica Coseno| H[Top 6 Fragmentos Recuperados]
-    end
-    
-    subgraph Tool Calling - Bodega de Inventario
-        Agent -->|Decisión de Invocación| I[Tool: consultar_inventario]
-        I -->|Query Python| J[(BD Inventario Bodega - 19 Repuestos)]
-        J -->|Stock, Precio CLP, Pasillo| K[Resultado JSON / Texto]
-    end
-    
-    Agent -->|Búsqueda de Contexto| G
-    H --> Agent
-    K --> Agent
-    
-    Agent -->|Respuesta con Citas y Trazabilidad| UI
-```
+1.  `ficha_tecnica_fiat_palio.pdf`: Especificaciones exactas de motor FIRE 1.3, torques de apriete, viscosidades y capacidades de lubricantes.
+2.  `MANUAL-DE-OPERACIONES-DE-TALLER-.pdf`: Listas de comprobación paso a paso para frenos, batería, inyectores y DPF.
+3.  `manual_fallas_multimarca_diagnostico.pdf`: Diagnóstico de luces del tablero (Check Engine, Aceite, Batería) y guía eléctrica de alza vidrios para Changan CX70 y SUVs.
+4.  `manual_recepcion_fallas_cliente_taller.pdf`: Guía de recepción cliente/mecánico, procedimiento de cambio de plumillas y tabla de rangos PSI de inflado de ruedas.
+5.  `mecanica-automotriz-mantenimiento-de-motores.pdf`: Libro de texto con teoría y fundamentos de mantenimiento de motores automotrices.
 
 ---
 
-## 5. Manuales Técnicos Indexados en RAG
-
-1. 📄 `ficha_tecnica_fiat_palio.pdf`: Especificaciones exactas de motor FIRE 1.3, torques de apriete, viscosidades y capacidades de lubricantes.
-2. 📄 `MANUAL-DE-OPERACIONES-DE-TALLER-.pdf`: Listas de comprobación paso a paso para frenos, batería, inyectores y DPF.
-3. 📄 `manual_fallas_multimarca_diagnostico.pdf`: Diagnóstico de luces del tablero (Check Engine, Aceite, Batería) y guía eléctrica de alza vidrios para Changan CX70 y SUVs.
-4. 📄 `manual_recepcion_fallas_cliente_taller.pdf`: Guía de recepción cliente/mecánico, procedimiento de cambio de plumillas y tabla de rangos PSI de inflado de ruedas.
-5. 📄 `mecanica-automotriz-mantenimiento-de-motores.pdf`: Libro de texto con teoría y fundamentos de mantenimiento de motores automotrices.
-
----
-
-## 6. Estructura del Proyecto
+## 5. Estructura del Proyecto
 
 ```text
 autotech/
 ├── README.md                                 # Documentación principal del proyecto
 ├── informe_tecnico_autotech.md               # Informe técnico académico completo
 ├── AutoTech_Copilot_Colab.ipynb              # Notebook optimizado para Google Colab
-├── generate_notebook.py                      # Generador automático del notebook Colab
-├── create_multibrand_pdf.py                  # Generador de manuales PDF multimarca
-├── create_customer_mechanic_pdf.py           # Generador de manuales PDF de recepción
 ├── archivos necesarios/                      # Módulo distribuible de la aplicación
 │   ├── app.py                                # Interfaz gráfica web Streamlit Cyber-Glow
 │   ├── rag_engine.py                         # Motor RAG, FAISS VectorStore y Agente Groq
@@ -120,13 +82,13 @@ autotech/
 
 ---
 
-## 7. Guía de Ejecución en Google Colab
+## 6. Guía de Ejecución en Google Colab
 
 ### Paso 1: Abrir el Notebook en Colab
 Abre [`AutoTech_Copilot_Colab.ipynb`](./AutoTech_Copilot_Colab.ipynb) directamente en [Google Colab](https://colab.research.google.com).
 
 ### Paso 2: Configurar la API Key de Groq
-1. En el panel izquierdo de Colab, haz clic en el ícono de **Llave🔑 (Secretos / Secrets)**.
+1. En el panel izquierdo de Colab, haz clic en el ícono de **Llave (Secretos / Secrets)**.
 2. Agrega un nuevo secreto con el nombre `LLM_API_KEY`.
 3. Pega tu API Key de Groq (la obtienes gratis en [console.groq.com](https://console.groq.com)).
 
