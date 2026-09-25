@@ -20,7 +20,6 @@
 - [6. Guía de Ejecución en Google Colab](#7-guía-de-ejecución-en-google-colab)
 - [7. Guía de Ejecución en Entorno Local](#8-guía-de-ejecución-en-entorno-local)
 - [8. Batería de Pruebas y Resultados](#9-batería-de-pruebas-y-resultados)
-- [9. Declaración de Autoría y Reflexiones](#10-declaración-de-autoría-y-reflexiones)
 
 ---
 
@@ -148,18 +147,3 @@ La batería de pruebas automatizadas (`test_suite.py`) verifica el correcto func
 | **P5** | ¿Qué repuestos tenemos en stock en bodega? | Tool (`consultar_inventario`) | Listado por categorías (Lubricantes, Frenos, Limpiaparabrisas, Eléctrico, etc.) | ✅ PASADO |
 | **P6** | Botonera alza vidrios Changan CX70 stock/precio | Tool (`consultar_inventario`) | Stock: 4 un. \| Precio: $29.990 CLP \| Ubicación: Pasillo D - Estante 2 | ✅ PASADO |
 
----
-
-## 10. Declaración de Autoría y Reflexiones
-
-### 👤 Paolo
-> *"Durante el desarrollo de esta evaluación parcial, mi principal desafío fue estructurar la base de datos de inventario y la integración de herramientas en el LLM. Entendí de manera práctica que los modelos de lenguaje no deben operar como islas aisladas; la verdadera utilidad en un entorno empresarial proviene de conectar el modelo con datos corporativos reales."*
-
-### 👤 Benjamín
-> *"Mi responsabilidad estuvo centrada en la implementación del pipeline RAG y la selección de la estrategia de embeddings. Enfrentar el problema de alucinaciones cuando el modelo respondía sobre lubricantes o especificaciones del Fiat Palio me enseñó la importancia del afinamiento de búsquedas semánticas. Lograr que el sistema cite de forma transparente el documento y número de página fue clave."*
-
-### 👤 José
-> *"Trabajé en el desarrollo de la interfaz de usuario en Streamlit, los componentes visuales y la preparación del entorno en Google Colab con Cloudflare Tunnel. Lograr que la aplicación web mantuviera un rendimiento fluido de carga mediante almacenamiento en caché (`@st.cache_resource`) demostró la importancia de una arquitectura bien optimizada."*
-
----
-*AutoTech JPB Solutions - Duoc UC 2026*
