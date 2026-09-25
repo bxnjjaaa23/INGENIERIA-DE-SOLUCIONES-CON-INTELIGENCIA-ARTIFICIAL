@@ -84,7 +84,7 @@ autotech/
 ## 6. Guía de Ejecución en Google Colab
 
 ### Paso 1: Abrir el Notebook en Colab
-Abre [`AutoTech_Copilot_Colab.ipynb`](./AutoTech_Copilot_Colab.ipynb) directamente en [Google Colab](https://colab.research.google.com).
+Abre [`AutoTech.ipynb`](./AutoTech_Copilot_Colab.ipynb) directamente en [Google Colab](https://colab.research.google.com).
 
 ### Paso 2: Configurar la API Key de Groq
 1. En el panel izquierdo de Colab, haz clic en el ícono de **Llave (Secretos / Secrets)**.
