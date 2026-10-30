@@ -144,35 +144,35 @@ def sync_manuals_from_google_drive(target_dir: str = ".") -> List[str]:
 # -----------------------------------------------------------------------------
 INVENTARIO_BODEGA = {
     # Lubricantes y Fluidos
-    "aceite 10w-40": {"nombre": "Aceite Sintético 10W-40 (4 Litros)", "categoria": "Lubricantes", "stock": 18, "precio_clp": 28990, "bodega": "Pasillo A - Estante 2", "desc": "Aceite semi-sintético para motores a gasolina y diésel ligero."},
-    "aceite 15w-40": {"nombre": "Aceite Mineral 15W-40 (4 Litros)", "categoria": "Lubricantes", "stock": 25, "precio_clp": 22490, "bodega": "Pasillo A - Estante 1", "desc": "Aceite mineral de alta viscosidad para motores con kilometraje avanzado."},
-    "aceite 5w-30": {"nombre": "Aceite Sintético Premium 5W-30 (4 Litros)", "categoria": "Lubricantes", "stock": 14, "precio_clp": 34990, "bodega": "Pasillo A - Estante 3", "desc": "Aceite 100% sintético bajo en cenizas para motores modernos y DPF."},
-    "liquido de frenos dot4": {"nombre": "Líquido de Frenos DOT 4 (500ml)", "categoria": "Fluidos", "stock": 30, "precio_clp": 5990, "bodega": "Pasillo A - Estante 4", "desc": "Líquido sintético de alto punto de ebullición para sistemas ABS y disco."},
-    
+    "aceite 10w-40": {"nombre": "Aceite Sintético 10W-40 (4 Litros)", "categoria": "Lubricantes", "stock": 18, "precio_clp": 15990, "bodega": "Pasillo A - Estante 2", "desc": "Aceite semi-sintético para motores a gasolina y diésel ligero."},
+    "aceite 15w-40": {"nombre": "Aceite Mineral 15W-40 (4 Litros)", "categoria": "Lubricantes", "stock": 25, "precio_clp": 12990, "bodega": "Pasillo A - Estante 1", "desc": "Aceite mineral de alta viscosidad para motores con kilometraje avanzado."},
+    "aceite 5w-30": {"nombre": "Aceite Sintético Premium 5W-30 (4 Litros)", "categoria": "Lubricantes", "stock": 14, "precio_clp": 24990, "bodega": "Pasillo A - Estante 3", "desc": "Aceite 100% sintético bajo en cenizas para motores modernos y DPF."},
+    "liquido de frenos dot4": {"nombre": "Líquido de Frenos DOT 4 (500ml)", "categoria": "Fluidos", "stock": 30, "precio_clp": 4990, "bodega": "Pasillo A - Estante 4", "desc": "Líquido sintético de alto punto de ebullición para sistemas ABS y disco."},
+
     # Frenos
-    "pastillas de freno": {"nombre": "Juego Pastillas de Freno Delanteras Fiat/Universal", "categoria": "Frenos", "stock": 15, "precio_clp": 24990, "bodega": "Pasillo C - Estante 3", "desc": "Pastillas cerámicas de baja emisión de polvo con indicador sonoro."},
-    "discos de freno": {"nombre": "Juego Discos de Freno Ventilados 257mm", "categoria": "Frenos", "stock": 8, "precio_clp": 38990, "bodega": "Pasillo C - Estante 4", "desc": "Discos de freno de acero templado antidealante."},
+    "pastillas de freno": {"nombre": "Juego Pastillas de Freno Delanteras Fiat/Universal", "categoria": "Frenos", "stock": 15, "precio_clp": 22990, "bodega": "Pasillo C - Estante 3", "desc": "Pastillas cerámicas de baja emisión de polvo con indicador sonoro."},
+    "discos de freno": {"nombre": "Juego Discos de Freno Ventilados 257mm", "categoria": "Frenos", "stock": 8, "precio_clp": 44990, "bodega": "Pasillo C - Estante 4", "desc": "Discos de freno de acero templado antideslizante."},
 
     # Visibilidad y Limpiaparabrisas
-    "plumillas 18": {"nombre": "Plumilla Limpiaparabrisas Goma 18\" (Universal)", "categoria": "Limpiaparabrisas", "stock": 15, "precio_clp": 4990, "bodega": "Pasillo B - Caja 01", "desc": "Plumilla de goma de alta durabilidad con adaptador U-Hook universal."},
-    "plumillas 22": {"nombre": "Plumilla Silicona Aerodinámica 22\" (Changan / SUV / Universal)", "categoria": "Limpiaparabrisas", "stock": 12, "precio_clp": 7990, "bodega": "Pasillo B - Caja 02", "desc": "Plumilla flexible de silicona con deflector aerodinámico."},
+    "plumillas 18": {"nombre": "Plumilla Limpiaparabrisas Goma 18\" (Universal)", "categoria": "Limpiaparabrisas", "stock": 15, "precio_clp": 7990, "bodega": "Pasillo B - Caja 01", "desc": "Plumilla de goma de alta durabilidad con adaptador U-Hook universal."},
+    "plumillas 22": {"nombre": "Plumilla Silicona Aerodinámica 22\" (Changan / SUV / Universal)", "categoria": "Limpiaparabrisas", "stock": 12, "precio_clp": 12990, "bodega": "Pasillo B - Caja 02", "desc": "Plumilla flexible de silicona con deflector aerodinámico."},
 
     # Neumáticos y Presión
-    "neumatico 175/65 r14": {"nombre": "Neumático 175/65 R14 All Season", "categoria": "Neumáticos", "stock": 16, "precio_clp": 42990, "bodega": "Racks Neumáticos - Sector N1", "desc": "Neumático radial para sedán y hatchback."},
+    "neumatico 175/65 r14": {"nombre": "Neumático 175/65 R14 All Season", "categoria": "Neumáticos", "stock": 16, "precio_clp": 72990, "bodega": "Racks Neumáticos - Sector N1", "desc": "Neumático radial para sedán y hatchback."},
     "manometro digital": {"nombre": "Medidor de Presión de Neumáticos Digital / Manómetro", "categoria": "Herramientas", "stock": 10, "precio_clp": 9990, "bodega": "Pasillo B - Caja 08", "desc": "Manómetro digital de precisión de 0 a 100 PSI."},
-    "valvula tpms": {"nombre": "Válvula Sensores TPMS Electrónica Universal", "categoria": "Neumáticos", "stock": 8, "precio_clp": 18990, "bodega": "Pasillo B - Caja 09", "desc": "Válvula programable de monitoreo de presión de aire."},
+    "valvula tpms": {"nombre": "Válvula Sensores TPMS Electrónica Universal", "categoria": "Neumáticos", "stock": 8, "precio_clp": 19990, "bodega": "Pasillo B - Caja 09", "desc": "Válvula programable de monitoreo de presión de aire."},
 
     # Filtración y Motor
     "filtro de aceite fiat": {"nombre": "Filtro de Aceite Fiat Palio 1.3 FIRE", "categoria": "Filtros", "stock": 12, "precio_clp": 6990, "bodega": "Pasillo B - Caja 04", "desc": "Filtro de aceite blindado de flujo completo."},
-    "filtro de aire fiat": {"nombre": "Filtro de Aire Fiat Palio 1.3 FIRE", "categoria": "Filtros", "stock": 8, "precio_clp": 8490, "bodega": "Pasillo B - Caja 05", "desc": "Elemento filtrante de celulosa de alta eficiencia."},
-    "filtro de particulas dpf": {"nombre": "Filtro de Partículas DPF Universal/Diesel", "categoria": "Filtros", "stock": 2, "precio_clp": 289900, "bodega": "Bodega Especial - Racks", "desc": "Filtro DPF diésel de cordierita para retención de hollín."},
-    "bujia fire": {"nombre": "Set 4 Bujías NGK para Motor Fiat FIRE 1.3", "categoria": "Motor", "stock": 20, "precio_clp": 14990, "bodega": "Pasillo B - Caja 12", "desc": "Bujías de encendido de cobre electrodo 0.8mm."},
-    "correa distribucion": {"nombre": "Kit Correa Distribución + Tensor Fiat 1.3 FIRE", "categoria": "Motor", "stock": 5, "precio_clp": 38990, "bodega": "Pasillo C - Estante 1", "desc": "Kit completo de correa dentada reforzada y polea tensora."},
+    "filtro de aire fiat": {"nombre": "Filtro de Aire Fiat Palio 1.3 FIRE", "categoria": "Filtros", "stock": 8, "precio_clp": 10990, "bodega": "Pasillo B - Caja 05", "desc": "Elemento filtrante de celulosa de alta eficiencia."},
+    "filtro de particulas dpf": {"nombre": "Filtro de Partículas DPF Universal/Diesel", "categoria": "Filtros", "stock": 2, "precio_clp": 249900, "bodega": "Bodega Especial - Racks", "desc": "Filtro DPF diésel de cordierita para retención de hollín."},
+    "bujia fire": {"nombre": "Set 4 Bujías NGK para Motor Fiat FIRE 1.3", "categoria": "Motor", "stock": 20, "precio_clp": 19990, "bodega": "Pasillo B - Caja 12", "desc": "Bujías de encendido de cobre electrodo 0.8mm."},
+    "correa distribucion": {"nombre": "Kit Correa Distribución + Tensor Fiat 1.3 FIRE", "categoria": "Motor", "stock": 5, "precio_clp": 79990, "bodega": "Pasillo C - Estante 1", "desc": "Kit completo de correa dentada reforzada y polea tensora."},
 
     # Eléctrica y Confort (Alza Vidrios / Batería)
-    "botonera changan cx70": {"nombre": "Botonera Comando Alza Vidrios Changan CX70", "categoria": "Eléctrico", "stock": 4, "precio_clp": 29990, "bodega": "Pasillo D - Estante 2", "desc": "Botonera principal de puerta del conductor con bloqueo de ventanas."},
-    "motor elevacristales": {"nombre": "Motor Elevacristales 12V Puerta Universal / SUV", "categoria": "Eléctrico", "stock": 6, "precio_clp": 24990, "bodega": "Pasillo D - Estante 3", "desc": "Motor eléctrico de gran torque 12V marcha izquierda/derecha."},
-    "bateria 60ah": {"nombre": "Batería Libre Mantenimiento 12V 60Ah", "categoria": "Eléctrico", "stock": 6, "precio_clp": 64990, "bodega": "Bodega General - Sector Baterías", "desc": "Batería sellada CCA 520A de arranque en frío."}
+    "botonera changan cx70": {"nombre": "Botonera Comando Alza Vidrios Changan CX70", "categoria": "Eléctrico", "stock": 4, "precio_clp": 34990, "bodega": "Pasillo D - Estante 2", "desc": "Botonera principal de puerta del conductor con bloqueo de ventanas."},
+    "motor elevacristales": {"nombre": "Motor Elevacristales 12V Puerta Universal / SUV", "categoria": "Eléctrico", "stock": 6, "precio_clp": 52990, "bodega": "Pasillo D - Estante 3", "desc": "Motor eléctrico de gran torque 12V marcha izquierda/derecha."},
+    "bateria 60ah": {"nombre": "Batería Libre Mantenimiento 12V 60Ah", "categoria": "Eléctrico", "stock": 6, "precio_clp": 94990, "bodega": "Bodega General - Sector Baterías", "desc": "Batería sellada CCA 520A de arranque en frío."}
 }
 
 TOOL_INVENTARIO_SCHEMA = {
@@ -215,11 +215,28 @@ def consultar_inventario(nombre_repuesto: str) -> str:
             res += "\n"
         return res
 
-    # Búsqueda específica por coincidencia
-    coincidencias = []
+    # Búsqueda específica por coincidencia y relevancia
+    coincidencias_con_score = []
+    query_words = set(w for w in query.split() if len(w) > 2)
+
     for key, data in INVENTARIO_BODEGA.items():
-        if key in query or any(word in key for word in query.split() if len(word) > 2):
-            coincidencias.append(data)
+        score = 0
+        if key == query:
+            score = 100
+        elif key in query or query in key:
+            score = 50 + len(key)
+        else:
+            k_words = set(w for w in key.split() if len(w) > 2)
+            overlap = len(query_words.intersection(k_words))
+            if overlap > 0:
+                score = overlap * 10
+
+        if score > 0:
+            coincidencias_con_score.append((score, data))
+
+    # Ordenar por mayor relevancia primero
+    coincidencias_con_score.sort(key=lambda x: x[0], reverse=True)
+    coincidencias = [item for _, item in coincidencias_con_score]
             
     if coincidencias:
         res = f"**RESULTADOS DE INVENTARIO PARA '{nombre_repuesto}':**\n"
