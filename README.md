@@ -12,7 +12,7 @@
 
 > **Institución:** Duoc UC — Escuela de Informática y Telecomunicaciones  
 > **Asignatura:** ISY0101 — Ingeniería de Soluciones con Inteligencia Artificial  
-> **Evaluación:** Evaluación Parcial N°2 (EP2) — Encargo y Presentación: Agente Funcional  
+> **Evaluación:** Evaluación Parcial N°2 — Encargo y Presentación: Agente Funcional  
 > **Integrantes:** Paolo Jorquera, Benjamín Arriaza y José Castillo  
 > **Repositorio Oficial:** [github.com/bxnjjaaa23/INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL](https://github.com/bxnjjaaa23/INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL)  
 > **Cuaderno Interactivo Colab:** [`AutoTech_EP2.ipynb`](./AutoTech_EP2.ipynb)  
@@ -46,7 +46,7 @@
 
 ### Solución Implementada: Agente Autónomo Funcional EP2
 
-En esta EP2 el copiloto de la EP1 se transformó en un **Agente Autónomo Orquestador**. Usa el patrón **ReAct (Reasoning + Acting)** junto con **Plan-and-Execute**, y está impulsado por el modelo **`openai/gpt-oss-20b` (100% NO-LLAMA)** a través de la API de Groq. El agente puede:
+En esta EP2 el copiloto de la EP1 se transformó en un **Agente Autónomo Orquestador**. Usa el patrón **ReAct (Reasoning + Acting)** junto con **Plan-and-Execute**, y está impulsado por el modelo **`openai/gpt-oss-20b` a través de la API de Groq. El agente puede:
 
 * Planificar trabajos mecánicos dando prioridad a la **seguridad vial** (frenos, dirección y neumáticos).
 * Coordinar sub-agentes especializados (Diagnóstico RAG, Bodega y Baremo de Taller).
@@ -194,7 +194,7 @@ En la interfaz el plan se convierte en una hoja de ruta interactiva:
 
 | Decisión de Diseño | Opción Seleccionada | Alternativas Descartadas | Justificación Técnica y Alineación con la Rúbrica |
 |---|---|---|---|
-| **Modelo Fundacional LLM** | `openai/gpt-oss-20b` (NO-LLAMA) vía Groq API | Modelos LLaMA (Meta), GPT-4o directo, Claude 3.5 | Cumple con la exigencia de la cátedra de no usar LLaMA. Arquitectura MoE de 20B parámetros, muy rápida en las LPU de Groq (~1.000 tokens/s), function calling nativo y costo cero en Free Tier. |
+| **Modelo Fundacional LLM** | `openai/gpt-oss-20b` vía Groq API | Modelos LLaMA (Meta), GPT-4o directo, Claude 3.5 | Arquitectura MoE de 20B parámetros, muy rápida en las LPU de Groq (~1.000 tokens/s), function calling nativo y costo cero en Free Tier. |
 | **Framework de Agentes** | LangChain (Agents + Tools) | Autogen, CrewAI, Haystack | Es el ecosistema más maduro y documentado para prompts tipados, memorias deslizantes y tool calling. |
 | **Indexación Vectorial** | FAISS (`IndexFlatIP`) | ChromaDB, Pinecone, Qdrant | Corre en memoria RAM sin servicios externos, se serializa fácil en `.pkl` y funciona bien en Colab. |
 | **Modelo de Embeddings** | `all-MiniLM-L6-v2` (SentenceTransformers) | OpenAI text-embedding-3-small, Cohere | Ligero (384 dim), corre 100% local en CPU y no consume cuota de API. |
@@ -308,7 +308,7 @@ INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL/
 
 ### 9.1. Opción A: Demostración Interactiva en Google Colab (Recomendada)
 
-Para la presentación oral se usa el cuaderno [`AutoTech_EP2.ipynb`](./AutoTech_EP2.ipynb):
+Utilizar el cuaderno [`AutoTech_EP2.ipynb`](./AutoTech_EP2.ipynb):
 
 1. Abrir el notebook en Google Colab.
 2. Configurar la clave `LLM_API_KEY` en **Secrets** (ícono de llave).
