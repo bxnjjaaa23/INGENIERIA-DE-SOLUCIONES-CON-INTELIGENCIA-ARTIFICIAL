@@ -1,13 +1,5 @@
 # AutoTech JPB Solutions - Agente Autónomo Orquestador de Taller ⚙️
 
-[![Duoc UC](https://img.shields.io/badge/Duoc_UC-ISY0101-002B49.svg)](https://www.duoc.cl)
-[![Evaluación](https://img.shields.io/badge/Evaluaci%C3%B3n-EP2_Agente_Funcional-orange.svg)]()
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org)
-[![LangChain](https://img.shields.io/badge/Framework-LangChain_0.1+-1C3C3C.svg)](https://www.langchain.com)
-[![Model](https://img.shields.io/badge/LLM-openai%2Fgpt--oss--20b_(NO--LLAMA)-10a37f.svg)](https://groq.com)
-[![Streamlit](https://img.shields.io/badge/UI-Streamlit_1.30+-FF4B4B.svg?logo=streamlit&logoColor=white)](https://streamlit.io)
-[![FAISS](https://img.shields.io/badge/VectorStore-FAISS_IndexFlatIP-00599C.svg)](https://github.com/facebookresearch/faiss)
-
 ---
 
 > **Institución:** Duoc UC — Escuela de Informática y Telecomunicaciones  
@@ -19,7 +11,7 @@
 
 ---
 
-## 📑 Tabla de Contenidos
+## Tabla de Contenidos
 
 1. [Resumen Ejecutivo y Contexto Organizacional](#1-resumen-ejecutivo-y-contexto-organizacional)
 2. [Arquitectura General y Orquestación del Agente (IE8)](#2-arquitectura-general-y-orquestación-del-agente-ie8)
