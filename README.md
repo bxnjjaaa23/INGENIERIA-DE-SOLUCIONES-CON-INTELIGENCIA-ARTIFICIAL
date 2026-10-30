@@ -37,24 +37,27 @@
 
 ## 1. Resumen Ejecutivo y Contexto Organizacional
 
-**AutoTech JPB Solutions** es un centro integral de mantenimiento preventivo, correctivo y diagnóstico automotriz multimarca ubicado en Santiago de Chile. El taller enfrenta los desafíos operativos típicos de la industria automotriz nacional:
-1. **Pérdida de tiempo en consulta técnica:** Mecánicos consultando manualmente manuales de taller voluminosos para encontrar torques de apriete, capacidades de lubricante o procedimientos de desmontaje.
-2. **Desconexión entre recepción y bodega de repuestos:** Demoras cotizando existencias físicas, precios en pesos chilenos (CLP) y ubicación exacta en estanterías.
-3. **Presupuestación inconsistente de mano de obra:** Tarifas fijadas sin alineación al baremo estándar de tiempos de taller ni a la complejidad de las faenas.
-4. **Falta de trazabilidad y persistencia:** Órdenes de trabajo manuscritas propensas a errores o pérdidas de historial.
+**AutoTech JPB Solutions** es un taller de mantenimiento preventivo, correctivo y diagnóstico multimarca ubicado en Santiago. Como muchos talleres del país, enfrenta varios problemas cotidianos:
+
+1. **Pérdida de tiempo buscando información técnica:** Los mecánicos tienen que revisar manuales largos y pesados para encontrar torques, capacidades de aceite o el procedimiento correcto de desmontaje.
+2. **Desconexión entre recepción y bodega:** Se pierde tiempo cotizando stock, precios en CLP y la ubicación exacta de cada repuesto.
+3. **Presupuestos de mano de obra inconsistentes:** Las tarifas no siempre coinciden con el baremo de tiempos de taller ni con la complejidad real del trabajo.
+4. **Falta de trazabilidad:** Las órdenes de trabajo escritas a mano se pierden o se llenan de errores.
 
 ### Solución Implementada: Agente Autónomo Funcional EP2
-En esta Evaluación Parcial 2 (EP2), el copiloto inicial de EP1 evoluciona a un **Agente Autónomo Orquestador** fundamentado en el patrón **ReAct (Reasoning + Acting)** y **Plan-and-Execute**, impulsado por el modelo oficial **`openai/gpt-oss-20b` (100% NO-LLAMA)** vía Groq API. El agente es capaz de:
-* Planificar estratégicamente faenas mecánicas priorizando la **seguridad vial activa** (frenos, dirección, neumáticos).
-* Simular y registrar protocolos de coordinación entre sub-agentes especializados (Diagnóstico RAG, Logística de Bodega, Baremo de Taller).
-* Guiar la ejecución del mecánico paso a paso mediante **checkpoints progresivos interactivos** con retroalimentación en tiempo real.
-* Emitir, consultar, actualizar y persistir órdenes de trabajo formales en un almacenamiento local estructurado (`ordenes_trabajo_autotech.json`).
+
+En esta EP2 el copiloto de la EP1 se transformó en un **Agente Autónomo Orquestador**. Usa el patrón **ReAct (Reasoning + Acting)** junto con **Plan-and-Execute**, y está impulsado por el modelo **`openai/gpt-oss-20b` (100% NO-LLAMA)** a través de la API de Groq. El agente puede:
+
+* Planificar trabajos mecánicos dando prioridad a la **seguridad vial** (frenos, dirección y neumáticos).
+* Coordinar sub-agentes especializados (Diagnóstico RAG, Bodega y Baremo de Taller).
+* Guiar al mecánico paso a paso con **checkpoints interactivos** y feedback en tiempo real.
+* Crear, consultar, actualizar y guardar órdenes de trabajo formales en un archivo local (`ordenes_trabajo_autotech.json`).
 
 ---
 
 ## 2. Arquitectura General y Orquestación del Agente (IE8)
 
-La solución adopta una arquitectura modular desacoplada en tres capas principales: **Capa de Presentación y Despliegue**, **Capa de Inteligencia y Orquestación LangChain**, y **Capa de Almacenamiento y Herramientas Locales**.
+La solución está dividida en tres capas bien separadas: **Interfaz y Despliegue**, **Inteligencia y Orquestación con LangChain**, y **Almacenamiento + Herramientas Locales**.
 
 ```mermaid
 graph TD
@@ -94,86 +97,96 @@ graph TD
 
 ## 3. Herramientas Autónomas Integradas (IE1)
 
-El agente dispone de un conjunto balanceado de **4 herramientas autónomas** que cubren las tres dimensiones exigidas por la rúbrica: **consulta**, **escritura/persistencia** y **razonamiento adaptativo**:
+El agente cuenta con **4 herramientas** que cubren las tres dimensiones que pide la rúbrica: consulta, escritura/persistencia y razonamiento adaptativo.
 
 | Herramienta | Tipo | Dimensión | Descripción Técnica |
 |---|---|---|---|
-| `consulta_manual_tecnico` | Consulta | RAG / Semántica | Recupera fragmentos técnicos de alta relevancia desde los 5 manuales locales (Fiat Palio 1.3, Changan CX70, Manual de Operaciones, Diagnóstico Multimarca y Mantenimiento de Motores). Devuelve texto exacto con citas `[Manual, Pág. X]`. |
-| `consultar_inventario_repuestos` | Consulta | Datos Locales | Consulta el catálogo en tiempo real de bodega de repuestos (20 SKU). Permite listar categorías completas o buscar por palabra clave, informando stock, precio en CLP y ubicación física (pasillo y estantería). |
-| `registrar_orden_reparacion` | Escritura | Persistencia | Registra y persiste formalmente órdenes de trabajo en `ordenes_trabajo_autotech.json`. Calcula la mano de obra según baremo chileno ($20.000 - $45.000 CLP), valida el nombre del cliente y actualiza órdenes existentes (`id_orden_existente`) sin duplicar. |
-| `buscar_en_internet` | Consulta / Adaptación | Búsqueda Externa | Consulta portales automotrices internacionales (TodoMecánica, AutoDoc Club). **Control ético:** Solo se dispara si los manuales locales no contienen la información y previa autorización explícita del usuario. |
+| `consulta_manual_tecnico` | Consulta | RAG / Semántica | Busca en los 5 manuales locales (Fiat Palio 1.3, Changan CX70, Manual de Operaciones, Diagnóstico Multimarca y Mantenimiento de Motores) y devuelve el texto exacto con cita `[Manual, Pág. X]`. |
+| `consultar_inventario_repuestos` | Consulta | Datos Locales | Consulta el stock de bodega (20 SKU). Puede listar categorías o buscar por palabra clave y entrega stock, precio en CLP y ubicación (pasillo + estantería). |
+| `registrar_orden_reparacion` | Escritura | Persistencia | Guarda órdenes en `ordenes_trabajo_autotech.json`. Calcula mano de obra según baremo chileno ($20.000 - $45.000 CLP), valida el nombre del cliente y permite actualizar una orden existente sin duplicarla. |
+| `buscar_en_internet` | Consulta / Adaptación | Búsqueda Externa | Consulta sitios como TodoMecánica o AutoDoc Club. **Solo se activa** si los manuales locales no tienen la información y el usuario da permiso explícito. |
 
 ---
 
 ## 4. Procesos de Memoria y Recuperación de Contexto (IE3, IE4)
 
 ### 4.1. Memoria de Corto Plazo: `AutoTechSessionMemory` (IE3)
-* **Mecanismo:** Implementa una ventana deslizante de conversación estructurada (`ConversationBufferWindowMemory`) con un tope de **6 turnos conversacionales** (`max_history_turns=6`).
-* **Protección de Tokens (TPM Guard):** Groq Free impone un límite de 8.000 tokens por minuto (TPM) y 200.000 tokens diarios (TPD). El buffer deslizante garantiza que el historial no sature la ventana de contexto, manteniendo viva la referencia del vehículo y la falla a lo largo de interacciones prolongadas.
-* **Continuidad de Tareas:** Si el cliente en el Turno 1 menciona: *"Tengo un Fiat Palio 2008 con chillido en frenos"*, en el Turno 2 puede preguntar simplemente: *"¿Tienen repuestos para eso en bodega?"*; el agente recupera el vehículo desde la memoria sin volver a solicitar datos.
+
+* Usa una ventana deslizante de **6 turnos** (`ConversationBufferWindowMemory` con `max_history_turns=6`).
+* Protege el límite de tokens de Groq Free (8.000 TPM y 200.000 TPD). Así el historial no se desborda y el agente sigue recordando el vehículo y la falla aunque la conversación se alargue.
+* Ejemplo práctico: si en el primer turno el cliente dice *"Tengo un Fiat Palio 2008 con chillido en frenos"*, en el segundo puede preguntar solo *"¿Tienen repuestos para eso?"* y el agente ya sabe de qué auto se trata.
 
 ### 4.2. Memoria de Largo Plazo y Persistencia: JSON Transaccional (IE3)
-* **Archivo de Persistencia:** `ordenes_trabajo_autotech.json`.
-* **Esquema Estructurado:**
-  ```json
-  {
-    "id_orden": "OT-2026-0001",
-    "fecha_creacion": "29-10-2026 21:30",
-    "cliente": "Carlos Mendoza",
-    "vehiculo": "Fiat Palio 1.3 Fire 2008",
-    "diagnostico": "Desgaste severo en pastillas de freno y nivel bajo de lubricante.",
-    "repuestos_requeridos": ["Pastillas de freno delanteras", "Aceite 10W-40 (4L)"],
-    "costo_repuestos_clp": 50980,
-    "costo_mano_obra_clp": 45000,
-    "total_estimado_clp": 95980,
-    "cita_programada": "30-10-2026 10:00 hrs",
-    "prioridad": "Alta",
-    "estado": "En Taller"
-  }
-  ```
-* **Transaccionalidad:** Las funciones `_guardar_orden_local`, `eliminar_orden_trabajo` y `cambiar_estado_orden_trabajo` garantizan consistencia atómica mediante lecturas/escrituras síncronas en disco.
+
+* Archivo: `ordenes_trabajo_autotech.json`.
+* Estructura de ejemplo:
+
+```json
+{
+  "id_orden": "OT-2026-0001",
+  "fecha_creacion": "29-10-2026 21:30",
+  "cliente": "Carlos Mendoza",
+  "vehiculo": "Fiat Palio 1.3 Fire 2008",
+  "diagnostico": "Desgaste severo en pastillas de freno y nivel bajo de lubricante.",
+  "repuestos_requeridos": ["Pastillas de freno delanteras", "Aceite 10W-40 (4L)"],
+  "costo_repuestos_clp": 50980,
+  "costo_mano_obra_clp": 45000,
+  "total_estimado_clp": 95980,
+  "cita_programada": "30-10-2026 10:00 hrs",
+  "prioridad": "Alta",
+  "estado": "En Taller"
+}
+```
+
+* Las funciones `_guardar_orden_local`, `eliminar_orden_trabajo` y `cambiar_estado_orden_trabajo` leen y escriben de forma síncrona para mantener consistencia.
 
 ### 4.3. Recuperación de Contexto Semántico: Motor RAG (IE4)
-* **Chunking Semántico:** 800 caracteres con solapamiento (*overlap*) de 120 caracteres para preservar la continuidad de instrucciones operativas y tablas de calibración.
-* **Modelo de Embeddings:** `sentence-transformers/all-MiniLM-L6-v2` (384 dimensiones densas), normalizado con norma $L_2$.
-* **VectorStore:** `FAISS` configurado con índice de producto interno (`IndexFlatIP`), equivalente matemática y operativamente a la **similitud de coseno** sobre vectores unitarios:
-  $$\text{Similitud}(u, v) = u \cdot v = \cos(\theta)$$
-* **Caché Persistente en Disco:** Archivo `autotech_vector_cache.pkl` (553 chunks indexados). Permite una **inicialización en frío de 0.03 segundos**, evitando indexar PDFs en cada ejecución de Google Colab.
+
+* Chunking de 800 caracteres con overlap de 120 para no cortar instrucciones ni tablas.
+* Embeddings: `sentence-transformers/all-MiniLM-L6-v2` (384 dimensiones, normalizados con norma L2).
+* VectorStore: FAISS con `IndexFlatIP` (equivalente a similitud de coseno sobre vectores unitarios).
+* Caché en disco: `autotech_vector_cache.pkl` con 553 chunks. Carga en frío en alrededor de 0.03 segundos, así no hay que reindexar los PDFs cada vez que se abre el Colab.
 
 ---
 
 ## 5. Estrategias de Planificación y Toma de Decisiones (IE5, IE7)
 
 ### 5.1. Esquema Plan-and-Execute y Prioridad por Criticidad (IE5)
-Antes de ejecutar herramientas en el taller, el agente descompone el requerimiento en un plan secuencial estricto. Aplica una **heurística de criticidad de seguridad activa**:
-* **Prioridad ALTA:** Cualquier compromiso de **frenos, dirección o neumáticos** se coloca obligatoriamente en el **Paso 1** (Inspección inmediata en elevador).
-* **Prioridad MEDIA:** Tren motriz, lubricación, refrigeración y encendido.
-* **Prioridad BAJA / CONFORT:** Alza cristales, luces accesorias, plumillas limpiaparabrisas y estética.
 
-### 5.2. Protocolo de Coordinación y Negociación Inter-Agentes (Multi-Agent Dispatch)
-El sistema modela la colaboración entre 4 roles especializados:
+Antes de llamar herramientas, el agente arma un plan secuencial. Aplica una regla simple de criticidad:
+
+* **Prioridad ALTA:** Frenos, dirección o neumáticos → siempre van en el Paso 1 (inspección inmediata).
+* **Prioridad MEDIA:** Tren motriz, lubricación, refrigeración, encendido.
+* **Prioridad BAJA / CONFORT:** Alza cristales, luces, plumillas, estética.
+
+### 5.2. Protocolo de Coordinación y Negociación Inter-Agentes
+
+El sistema simula la colaboración entre 4 roles:
 
 ```
-[Agente Orquestador] ────> [Agente de Diagnóstico RAG]  : Solicita criticidad y tolerancias
-[Agente de Diagnóstico] ──> [Agente Orquestador]         : Dictamina falla crítica en frenos (Prioridad Alta)
+[Agente Orquestador] ────> [Agente de Diagnóstico RAG]  : Pide criticidad y tolerancias
+[Agente de Diagnóstico] ──> [Agente Orquestador]         : Confirma falla crítica en frenos (Prioridad Alta)
 [Agente Orquestador] ────> [Agente de Bodega]           : Verifica stock de pastillas y aceite
-[Agente de Bodega] ──────> [Agente Orquestador]         : Confirma disponibilidad física en estanterías
-[Agente Orquestador] ────> [Agente de Taller]           : Solicita horas hombre y baremo estándar
+[Agente de Bodega] ──────> [Agente Orquestador]         : Confirma disponibilidad en estanterías
+[Agente Orquestador] ────> [Agente de Taller]           : Solicita horas-hombre y baremo
 [Agente de Taller] ──────> [Agente Orquestador]         : Asigna 2.3 horas estándar ($45.000 CLP)
-[Agente Orquestador] ────> [Mecánico en Elevador]       : Despacha plan secuencial para ejecución
+[Agente Orquestador] ────> [Mecánico en Elevador]       : Entrega el plan listo para ejecutar
 ```
 
-### 5.3. Checkpoints Progresivos para el Mecánico en Taller
-En la interfaz gráfica, el plan no es solo texto estático: se convierte en una **hoja de ruta interactiva**:
-1. El **Paso 1** aparece activo con su instrucción técnica y un checkbox de validación.
-2. Al marcar el check, el Paso 1 se consolida como `REALIZADO` (verde) y **se desbloquea sucesivamente el Paso 2**.
-3. La barra de progreso avanza en tiempo real ($0\% \rightarrow 25\% \rightarrow 50\% \rightarrow 75\% \rightarrow 100\%$).
-4. Al completar el último paso, se certifica el control de calidad final del vehículo.
+### 5.3. Checkpoints Progresivos para el Mecánico
+
+En la interfaz el plan se convierte en una hoja de ruta interactiva:
+
+1. El Paso 1 aparece activo con su instrucción y un checkbox.
+2. Al marcar el check, el paso se pone en verde (`REALIZADO`) y se desbloquea el siguiente.
+3. La barra de progreso avanza en tiempo real (0% → 25% → 50% → 75% → 100%).
+4. Cuando se completa el último paso se certifica el control de calidad final.
 
 ### 5.4. Toma de Decisiones Adaptativas ante Imprevistos (IE7)
-* **Adaptación por vehículo no indexado:** Si el usuario consulta por un modelo ausente en los 5 manuales (ej. Toyota Yaris, Hyundai Tucson), el agente no inventa especificaciones; detecta el fallo del RAG y solicita autorización para consultar la web.
-* **Adaptación por stock crítico:** Si una pieza requerida tiene stock 0, el agente alerta al usuario y sugiere piezas sustitutas o reprogramación de cita.
-* **Actualización inteligente de órdenes:** Si el cliente formaliza una orden preliminar y luego aporta su nombre o modifica la faena, el agente identifica el `id_orden_existente` y ejecuta una modificación transaccional en lugar de crear órdenes duplicadas huérfanas.
+
+* Si el auto no está en los 5 manuales (ej. Toyota Yaris o Hyundai Tucson), el agente no inventa datos: avisa que el RAG falló y pide permiso para buscar en internet.
+* Si un repuesto tiene stock 0, avisa y sugiere alternativas o reprogramar la cita.
+* Si el cliente completa o modifica una orden ya creada, el agente detecta el `id_orden_existente` y actualiza en lugar de generar un duplicado.
 
 ---
 
@@ -181,19 +194,18 @@ En la interfaz gráfica, el plan no es solo texto estático: se convierte en una
 
 | Decisión de Diseño | Opción Seleccionada | Alternativas Descartadas | Justificación Técnica y Alineación con la Rúbrica |
 |---|---|---|---|
-| **Modelo Fundacional LLM** | `openai/gpt-oss-20b` (NO-LLAMA) vía Groq API | Modelos LLaMA (Meta), GPT-4o directo, Claude 3.5 | **100% libre de LLaMA** conforme a directrices de cátedra. Arquitectura de Mezcla de Expertos (MoE) de 20B parámetros con rendimiento ultra-rápido en LPUs de Groq (~1.000 tokens/s), soporte nativo de function calling en JSON y costo cero en Free Tier. |
-| **Framework de Agentes** | `LangChain` (Agents + Tools) | Autogen, CrewAI, Haystack | Ecosistema más maduro y documentado para la integración con LangChain Chat Models, prompts tipados y gestión de memorias conversacionales deslizantes. |
-| **Indexación Vectorial** | `FAISS (IndexFlatIP)` | ChromaDB, Pinecone, Qdrant | Librería en C++ altamente optimizada, ejecutable en memoria RAM sin necesidad de levantar servicios de bases de datos externos en Google Colab, con serialización instantánea en archivo `.pkl`. |
-| **Modelo de Embeddings** | `all-MiniLM-L6-v2` (SentenceTransformers) | OpenAI text-embedding-3-small, Cohere | Modelo ligero de 384 dimensiones que corre 100% local en CPU en Colab con inferencia en milisegundos y sin consumo de cuota de API externa. |
-| **Persistencia Local** | JSON transaccional estructurado | SQLite, MongoDB, PostgreSQL | Almacenamiento portátil, auditable en texto plano, sin dependencias de red, perfectamente inspeccionable desde el notebook de entrega (`AutoTech_EP2.ipynb`). |
-| **Despliegue Web** | `Streamlit` + `Cloudflare Tunnel` | Gradio, Flask/FastAPI, ngrok | Streamlit ofrece reactividad nativa en Python con gestión de `st.session_state`. Cloudflare Tunnel permite túneles TLS públicos directos sin necesidad de registrar tokens de pago (a diferencia de ngrok). |
+| **Modelo Fundacional LLM** | `openai/gpt-oss-20b` (NO-LLAMA) vía Groq API | Modelos LLaMA (Meta), GPT-4o directo, Claude 3.5 | Cumple con la exigencia de la cátedra de no usar LLaMA. Arquitectura MoE de 20B parámetros, muy rápida en las LPU de Groq (~1.000 tokens/s), function calling nativo y costo cero en Free Tier. |
+| **Framework de Agentes** | LangChain (Agents + Tools) | Autogen, CrewAI, Haystack | Es el ecosistema más maduro y documentado para prompts tipados, memorias deslizantes y tool calling. |
+| **Indexación Vectorial** | FAISS (`IndexFlatIP`) | ChromaDB, Pinecone, Qdrant | Corre en memoria RAM sin servicios externos, se serializa fácil en `.pkl` y funciona bien en Colab. |
+| **Modelo de Embeddings** | `all-MiniLM-L6-v2` (SentenceTransformers) | OpenAI text-embedding-3-small, Cohere | Ligero (384 dim), corre 100% local en CPU y no consume cuota de API. |
+| **Persistencia Local** | JSON transaccional | SQLite, MongoDB, PostgreSQL | Portátil, legible en texto plano, sin dependencias de red y fácil de inspeccionar desde el notebook. |
+| **Despliegue Web** | Streamlit + Cloudflare Tunnel | Gradio, Flask/FastAPI, ngrok | Streamlit maneja bien el estado de sesión. Cloudflare Tunnel da URL pública TLS sin necesidad de tokens de pago (a diferencia de ngrok). |
 
 ---
 
 ## 7. Diagramas de Flujo y Protocolo de Coordinación (IE6, IE8)
 
 ### 7.1. Flujo de Decisión y Razonamiento ReAct del Agente
-El siguiente diagrama detalla la lógica de toma de decisiones adaptativas ante una consulta o requerimiento del taller:
 
 ```mermaid
 flowchart TD
@@ -234,7 +246,6 @@ flowchart TD
 ```
 
 ### 7.2. Secuencia Temporal de Negociación Inter-Agentes y Ejecución
-Diagrama de secuencia de la planificación y posterior ejecución en el elevador:
 
 ```mermaid
 sequenceDiagram
@@ -273,8 +284,6 @@ sequenceDiagram
 
 ## 8. Estructura del Repositorio
 
-El repositorio está organizado de forma limpia, separando el código fuente, la base de conocimiento vectorial, los manuales y las pruebas:
-
 ```text
 INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL/
 ├── README.md                                 # Informe técnico académico completo (Este documento)
@@ -298,17 +307,20 @@ INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL/
 ## 9. Guía de Instalación y Demostración en Vivo (IE10)
 
 ### 9.1. Opción A: Demostración Interactiva en Google Colab (Recomendada)
-Para la presentación oral (40%), se utiliza el cuaderno oficial [`AutoTech_EP2.ipynb`](./AutoTech_EP2.ipynb):
-1. Abrir [`AutoTech_EP2.ipynb`](./AutoTech_EP2.ipynb) en Google Colab.
-2. Configurar la clave `LLM_API_KEY` en el menú **Secrets (ícono de llave)** de Google Colab.
-3. Ejecutar las celdas en orden secuencial:
+
+Para la presentación oral se usa el cuaderno [`AutoTech_EP2.ipynb`](./AutoTech_EP2.ipynb):
+
+1. Abrir el notebook en Google Colab.
+2. Configurar la clave `LLM_API_KEY` en **Secrets** (ícono de llave).
+3. Ejecutar las celdas en orden:
    * **Celdas 1 a 6:** Instalación de dependencias y validación de credenciales.
-   * **Celdas 7 a 12:** Carga instantánea del caché RAG (`0.03s`), inicialización del Agente NO-LLAMA y memoria.
-   * **Celda 14:** Batería interactiva multietapa demostrando autonomía, memoria y toma de decisiones adaptativas.
-   * **Celda 16:** Inspección del archivo `ordenes_trabajo_autotech.json` comprobando persistencia.
-   * **Celda 18:** Lanzamiento de Streamlit a través del túnel seguro de Cloudflare con URL pública `.trycloudflare.com`.
+   * **Celdas 7 a 12:** Carga del caché RAG (~0.03 s), inicialización del agente y la memoria.
+   * **Celda 14:** Batería interactiva que muestra autonomía, memoria y decisiones adaptativas.
+   * **Celda 16:** Inspección del archivo `ordenes_trabajo_autotech.json`.
+   * **Celda 18:** Lanzamiento de Streamlit a través del túnel de Cloudflare (URL pública `.trycloudflare.com`).
 
 ### 9.2. Opción B: Ejecución en Entorno Local (Windows / Linux / macOS)
+
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/bxnjjaaa23/INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL.git
@@ -336,13 +348,12 @@ python test_suite.py
 # 6. Iniciar la aplicación web Streamlit
 streamlit run app_ep2.py
 ```
-Abre tu navegador web en `http://localhost:8501`.
+
+Abre el navegador en `http://localhost:8501`.
 
 ---
 
 ## 10. Evidencias de la Batería de Pruebas
-
-La batería de pruebas automatizada verifica exhaustivamente cada módulo:
 
 | Caso de Prueba | Entrada de Prueba | Módulo Validado | Criterio de Aceptación | Estado |
 |---|---|---|---|---|
@@ -365,3 +376,4 @@ La batería de pruebas automatizada verifica exhaustivamente cada módulo:
 * Reimers, N., & Gurevych, I. (2019). *Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP 2019), 3982–3992. https://doi.org/10.18653/v1/D19-1410
 * Streamlit Inc. (2024). *Streamlit: The fastest way to build and share data apps*. Snowflake Inc. https://docs.streamlit.io
 * Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., & Cao, Y. (2023). *ReAct: Synergizing Reasoning and Acting in Language Models*. International Conference on Learning Representations (ICLR 2023). https://arxiv.org/abs/2210.03629
+```
