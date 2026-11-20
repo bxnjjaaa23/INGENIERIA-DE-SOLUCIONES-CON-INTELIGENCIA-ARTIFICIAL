@@ -1,4 +1,4 @@
-# AutoTech JPB Solutions - Agente Autónomo Orquestador de Taller con Observabilidad Integral ⚙️📊
+﻿# AutoTech JPB Solutions - Agente Autónomo Orquestador de Taller con Observabilidad Integral ⚙️📊
 
 ---
 
@@ -7,7 +7,7 @@
 > **Evaluación:** Evaluación Parcial N°3 — Observabilidad, Telemetría y Rendimiento en Soluciones de IA  
 > **Integrantes:** Paolo Jorquera, Benjamín Arriaza y José Castillo  
 > **Repositorio Oficial:** [github.com/bxnjjaaa23/INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL](https://github.com/bxnjjaaa23/INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL)  
-> **Cuaderno Interactivo Colab:** [`AutoTech_EP2_avance2.ipynb`](./AutoTech_EP2_avance2.ipynb)  
+> **Cuaderno Interactivo Colab:** [`AutoTech_Ev3.ipynb`](./AutoTech_Ev3.ipynb)  
 > **Aplicación Web Cockpit (Streamlit):** [`app_ep2.py`](./app_ep2.py)  
 
 ---
@@ -107,7 +107,7 @@ $$\text{Tasa de Éxito} = \frac{N_{\text{exito}} + N_{\text{cache}}}{N_{\text{to
 
 El dashboard está disponible en dos modalidades:
 1. **Modalidad Web Interactiva:** Pestaña 5 en [`app_ep2.py`](./app_ep2.py) con métricas en vivo y botón de ejecución de batería de pruebas de variabilidad.
-2. **Modalidad Gráfica Analítica:** Generada en la Celda 24 del notebook [`AutoTech_EP2_avance2.ipynb`](./AutoTech_EP2_avance2.ipynb), produciendo el panel cuádruple:
+2. **Modalidad Gráfica Analítica:** Generada en la Celda 24 del notebook [`AutoTech_Ev3.ipynb`](./AutoTech_Ev3.ipynb), produciendo el panel cuádruple:
 
 | Panel 1: Latencia por Etapa (Cuello de Botella vs Fast-Path) | Panel 2: Consumo de Tokens por Consulta |
 |---|---|
@@ -211,7 +211,7 @@ La instrumentación de observabilidad permitió identificar cuellos de botella y
 ```text
 INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL/
 ├── README.md                                 # Informe técnico académico completo EP3
-├── AutoTech_EP2_avance2.ipynb                # Cuaderno Google Colab con Dashboard Matplotlib y 28 Celdas
+├── AutoTech_Ev3.ipynb                # Cuaderno Google Colab con Dashboard Matplotlib y 28 Celdas
 ├── app_ep2.py                                # Interfaz Web Cockpit Streamlit (5 Pestañas interactivas)
 ├── autotech_agent_ep2.py                     # Motor ReAct LangChain, Herramientas, Fast-Paths y Memoria
 ├── autotech_observability.py                 # Motor de Observabilidad, Telemetría, KPIs, Seguridad y Hash
@@ -231,7 +231,7 @@ INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL/
 ## 11. Guía de Instalación y Demostración en Vivo
 
 ### Opción A: Demostración Interactiva en Google Colab (Recomendada)
-1. Abrir el cuaderno [`AutoTech_EP2_avance2.ipynb`](./AutoTech_EP2_avance2.ipynb) en Google Colab.
+1. Abrir el cuaderno [`AutoTech_Ev3.ipynb`](./AutoTech_Ev3.ipynb) en Google Colab.
 2. Configurar la clave `LLM_API_KEY` en los Secretos de Colab (ícono de llave).
 3. Ejecutar las celdas secuencialmente:
    * **Sección 1 a 6:** Verificación de dependencias y configuración de credenciales (`openai/gpt-oss-20b`).
@@ -279,3 +279,4 @@ Abre tu navegador en `http://localhost:8501`.
 * Reimers, N., & Gurevych, I. (2019). *Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP 2019), 3982–3992. https://doi.org/10.18653/v1/D19-1410
 * Streamlit Inc. (2024). *Streamlit: The fastest way to build and share data apps*. Snowflake Inc. https://docs.streamlit.io
 * Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., & Cao, Y. (2023). *ReAct: Synergizing Reasoning and Acting in Language Models*. International Conference on Learning Representations (ICLR 2023). https://arxiv.org/abs/2210.03629
+
