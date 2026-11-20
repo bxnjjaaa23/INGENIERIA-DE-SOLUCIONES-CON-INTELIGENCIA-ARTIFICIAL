@@ -33,9 +33,9 @@
 
 **AutoTech JPB Solutions** es una empresa de servicios mecánicos multimarca ubicada en Santiago de Chile. El proyecto ha evolucionado a lo largo del semestre en tres fases de madurez tecnológica:
 
-* **EP1 (Asistente RAG):** Construcción de un motor semántico sobre manuales de taller mediante embeddings locales (`all-MiniLM-L6-v2`) y FAISS, permitiendo responder consultas técnicas en lenguaje natural.
-* **EP2 (Agente Autónomo ReAct & Plan-and-Execute):** Incorporación de autonomía operativa, llamada de herramientas (*tool calling*), persistencia transaccional de órdenes de trabajo en formato JSON, inventario en tiempo real y protocolo de autorización previa para búsquedas web externas.
-* **EP3 (Observabilidad, Telemetría y Blindaje de Rendimiento):** Instrumentación completa del flujo con trazabilidad granular de cada etapa, linaje criptográfico SHA-256 de entradas y salidas, cálculo de percentiles de latencia (P50, P75, P90, P95, P99), monitoreo de consumo de tokens (prompt vs completion), filtro de seguridad activo contra inyecciones de prompt en 0.001s, anonimización automática de datos sensibles (RUT y correos) y un Dashboard analítico interactivo tanto en Streamlit como en matplotlib.
+* **Evaluación Parcial 1 (Asistente RAG):** Construcción de un motor semántico sobre manuales de taller mediante embeddings locales (`all-MiniLM-L6-v2`) y FAISS, permitiendo responder consultas técnicas en lenguaje natural.
+* **Evaluación Parcial 2 (Agente Autónomo ReAct & Plan-and-Execute):** Incorporación de autonomía operativa, llamada de herramientas (*tool calling*), persistencia transaccional de órdenes de trabajo en formato JSON, inventario en tiempo real y protocolo de autorización previa para búsquedas web externas.
+* **Evaluación Parcial 3 (Observabilidad, Telemetría y Blindaje de Rendimiento):** Instrumentación completa del flujo con trazabilidad granular de cada etapa, linaje criptográfico SHA-256 de entradas y salidas, cálculo de percentiles de latencia (P50, P75, P90, P95, P99), monitoreo de consumo de tokens (prompt vs completion), filtro de seguridad activo contra inyecciones de prompt en 0.001s, anonimización automática de datos sensibles (RUT y correos) y un Dashboard analítico interactivo tanto en Streamlit como en matplotlib.
 
 ### Objetivos Clave de Rendimiento (SLO) en la Evaluación Parcial 3:
 * **SLO de Latencia Percentil 95 (P95):** $< 3.0$ segundos en operaciones generales; $< 0.05$ segundos en consultas resueltas por Fast-Path o memoria caché.
