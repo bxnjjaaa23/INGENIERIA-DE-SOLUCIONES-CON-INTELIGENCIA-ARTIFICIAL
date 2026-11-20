@@ -14,22 +14,22 @@
 
 ## Tabla de Contenidos
 
-1. [Resumen Ejecutivo y Evolución del Sistema (EP1 ➔ EP2 ➔ EP3)](#1-resumen-ejecutivo-y-evolución-del-sistema-ep1--ep2--ep3)
-2. [Arquitectura General y Orquestación del Agente (IE8)](#2-arquitectura-general-y-orquestación-del-agente-ie8)
-3. [Módulo de Observabilidad, Telemetría y Rendimiento (IE1, IE2, IE3, IE4, IE6)](#3-módulo-de-observabilidad-telemetría-y-rendimiento-ie1-ie2-ie3-ie4-ie6)
-4. [Dashboard de Observabilidad en Tiempo Real (IE1, IE2, IE4)](#4-dashboard-de-observabilidad-en-tiempo-real-ie1-ie2-ie4)
-5. [Herramientas Autónomas y Fast-Paths de Baja Latencia (IE1, IE7)](#5-herramientas-autónomas-y-fast-paths-de-baja-latencia-ie1-ie7)
-6. [Planificación Estratégica Previa (Plan-and-Execute) y Multi-Agente (IE5)](#6-planificación-estratégica-previa-plan-and-execute-y-multi-agente-ie5)
-7. [Seguridad Activa, Sanitización y Privacidad de Datos (IE6)](#7-seguridad-activa-sanitización-y-privacidad-de-datos-ie6)
-8. [Comparativa de Rendimiento y Análisis de Cuellos de Botella (IE7, IE4)](#8-comparativa-de-rendimiento-y-análisis-de-cuellos-de-botella-ie7-ie4)
-9. [Síntesis Crítica y Propuesta de Mejora Continua para Producción (IE8)](#9-síntesis-crítica-y-propuesta-de-mejora-continua-para-producción-ie8)
+1. [Resumen Ejecutivo y Evolución del Sistema](#1-resumen-ejecutivo-y-evolución-del-sistema)
+2. [Arquitectura General y Orquestación del Agente](#2-arquitectura-general-y-orquestación-del-agente)
+3. [Módulo de Observabilidad, Telemetría y Rendimiento](#3-módulo-de-observabilidad-telemetría-y-rendimiento)
+4. [Dashboard de Observabilidad en Tiempo Real](#4-dashboard-de-observabilidad-en-tiempo-real)
+5. [Herramientas Autónomas y Fast-Paths de Baja Latencia](#5-herramientas-autónomas-y-fast-paths-de-baja-latencia)
+6. [Planificación Estratégica Previa (Plan-and-Execute) y Multi-Agente](#6-planificación-estratégica-previa-plan-and-execute-y-multi-agente)
+7. [Seguridad Activa, Sanitización y Privacidad de Datos](#7-seguridad-activa-sanitización-y-privacidad-de-datos)
+8. [Comparativa de Rendimiento y Análisis de Cuellos de Botella](#8-comparativa-de-rendimiento-y-análisis-de-cuellos-de-botella)
+9. [Síntesis Crítica y Propuesta de Mejora Continua para Producción](#9-síntesis-crítica-y-propuesta-de-mejora-continua-para-producción)
 10. [Estructura del Repositorio](#10-estructura-del-repositorio)
 11. [Guía de Instalación y Demostración en Vivo](#11-guía-de-instalación-y-demostración-en-vivo)
 12. [Referencias Bibliográficas (Formato APA 7ma Edición)](#12-referencias-bibliográficas-formato-apa-7ma-edición)
 
 ---
 
-## 1. Resumen Ejecutivo y Evolución del Sistema (EP1 ➔ EP2 ➔ EP3)
+## 1. Resumen Ejecutivo y Evolución del Sistema
 
 **AutoTech JPB Solutions** es una empresa de servicios mecánicos multimarca ubicada en Santiago de Chile. El proyecto ha evolucionado a lo largo del semestre en tres fases de madurez tecnológica:
 
@@ -37,14 +37,14 @@
 * **EP2 (Agente Autónomo ReAct & Plan-and-Execute):** Incorporación de autonomía operativa, llamada de herramientas (*tool calling*), persistencia transaccional de órdenes de trabajo en formato JSON, inventario en tiempo real y protocolo de autorización previa para búsquedas web externas.
 * **EP3 (Observabilidad, Telemetría y Blindaje de Rendimiento):** Instrumentación completa del flujo con trazabilidad granular de cada etapa, linaje criptográfico SHA-256 de entradas y salidas, cálculo de percentiles de latencia (P50, P75, P90, P95, P99), monitoreo de consumo de tokens (prompt vs completion), filtro de seguridad activo contra inyecciones de prompt en 0.001s, anonimización automática de datos sensibles (RUT y correos) y un Dashboard analítico interactivo tanto en Streamlit como en matplotlib.
 
-### Objetivos Clave de Rendimiento (SLO) en EP3:
+### Objetivos Clave de Rendimiento (SLO) en la Evaluación Parcial 3:
 * **SLO de Latencia Percentil 95 (P95):** $< 3.0$ segundos en operaciones generales; $< 0.05$ segundos en consultas resueltas por Fast-Path o memoria caché.
 * **Disponibilidad y Tasa de Éxito Operativo:** $100\%$ de consultas procesadas con auditoría de estado (`exito`, `exito_cache`, `bloqueado_seguridad`).
 * **Seguridad Activa:** Bloqueo del $100\%$ de intentos de manipulación de instrucciones (*prompt injection*) antes de alcanzar el motor LLM.
 
 ---
 
-## 2. Arquitectura General y Orquestación del Agente (IE8)
+## 2. Arquitectura General y Orquestación del Agente
 
 La arquitectura de AutoTech JPB Solutions está organizada en cuatro capas desacopladas que aseguran escalabilidad, baja latencia y alta mantenibilidad:
 
@@ -82,11 +82,11 @@ graph TD
 
 ---
 
-## 3. Módulo de Observabilidad, Telemetría y Rendimiento (IE1, IE2, IE3, IE4, IE6)
+## 3. Módulo de Observabilidad, Telemetría y Rendimiento
 
 El archivo [`autotech_observability.py`](./autotech_observability.py) implementa la clase `AutoTechObservability`, diseñada específicamente para auditar agentes inteligentes sin introducir sobrecarga computacional (overhead $< 0.0005$ s por evento).
 
-### 3.1. Trazabilidad y Linaje de Ejecución (IE1)
+### 3.1. Trazabilidad y Linaje de Ejecución
 Cada interacción genera un registro estructurado con:
 * `id_ejecucion`: Identificador único UUIDv4 que agrupa todas las subtareas de una consulta.
 * `etapa`: Nombre de la fase operativa (`Filtro_Seguridad_Entrada`, `Consulta_Tecnica_RAG`, `Consulta_Inventario_Limites`, `Diagnostico_Sintomas_Ruido`).
@@ -96,14 +96,14 @@ Cada interacción genera un registro estructurado con:
 * `duracion_s`: Medición precisa con temporizadores de alta resolución `time.perf_counter()`.
 * `tokens_entrada` y `tokens_salida`: Conteo exacto para cálculo de costos operativos.
 
-### 3.2. Métricas y KPIs Globales (IE2)
+### 3.2. Métricas y KPIs Globales
 El motor computa automáticamente:
 $$\text{Latencia Media} = \frac{1}{N} \sum_{i=1}^{N} t_i \qquad \text{P95} = \text{Percentil}_{95}(\{t_1, \dots, t_N\})$$
 $$\text{Tasa de Éxito} = \frac{N_{\text{exito}} + N_{\text{cache}}}{N_{\text{total}}} \times 100\% \qquad \text{Tasa de Seguridad} = \frac{N_{\text{bloqueos}}}{N_{\text{total}}} \times 100\%$$
 
 ---
 
-## 4. Dashboard de Observabilidad en Tiempo Real (IE1, IE2, IE4)
+## 4. Dashboard de Observabilidad en Tiempo Real
 
 El dashboard está disponible en dos modalidades:
 1. **Modalidad Web Interactiva:** Pestaña 5 en [`app_ep2.py`](./app_ep2.py) con métricas en vivo y botón de ejecución de batería de pruebas de variabilidad.
@@ -117,7 +117,7 @@ El dashboard está disponible en dos modalidades:
 
 ---
 
-## 5. Herramientas Autónomas y Fast-Paths de Baja Latencia (IE1, IE7)
+## 5. Herramientas Autónomas y Fast-Paths de Baja Latencia
 
 El sistema dispone de **4 herramientas oficiales** (`AUTOTECH_TOOLS`) integradas mediante el protocolo de llamadas de función (*tool calling*) de LangChain:
 
@@ -130,7 +130,7 @@ El sistema dispone de **4 herramientas oficiales** (`AUTOTECH_TOOLS`) integradas
 
 ---
 
-## 6. Planificación Estratégica Previa (Plan-and-Execute) y Multi-Agente (IE5)
+## 6. Planificación Estratégica Previa (Plan-and-Execute) y Multi-Agente
 
 En la Pestaña 2 del Cockpit web, el agente descompone requerimientos mecánicos complejos antes de su ejecución aplicando una regla de **criticidad de seguridad vial activa**:
 
@@ -162,7 +162,7 @@ En la Pestaña 2 del Cockpit web, el agente descompone requerimientos mecánicos
 
 ---
 
-## 7. Seguridad Activa, Sanitización y Privacidad de Datos (IE6)
+## 7. Seguridad Activa, Sanitización y Privacidad de Datos
 
 Para garantizar un despliegue seguro en entornos de producción, el sistema implementa una doble barrera defensiva:
 
@@ -179,7 +179,7 @@ Para garantizar un despliegue seguro en entornos de producción, el sistema impl
 
 ---
 
-## 8. Comparativa de Rendimiento y Análisis de Cuellos de Botella (IE7, IE4)
+## 8. Comparativa de Rendimiento y Análisis de Cuellos de Botella
 
 La instrumentación de observabilidad permitió identificar cuellos de botella y cuantificar las optimizaciones de arquitectura:
 
@@ -193,7 +193,7 @@ La instrumentación de observabilidad permitió identificar cuellos de botella y
 
 ---
 
-## 9. Síntesis Crítica y Propuesta de Mejora Continua para Producción (IE8)
+## 9. Síntesis Crítica y Propuesta de Mejora Continua para Producción
 
 ### 9.1. Limitaciones Identificadas en el Entorno Actual
 * **Volatilidad de Modelos en Proveedores Serverless:** El retiro o depreciación de identificadores de modelos (`model_decommissioned`) en proveedores cloud evidencia el riesgo de acoplamiento rígido a nombres de modelos.
