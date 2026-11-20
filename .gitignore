@@ -1,13 +1,10 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Caches and virtual environments
-venv/
-env/
 .env
-
-# Colab runtime files
-.config/
-sample_data/
+*.log
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+mingit/
+Autotech.rar
+cosas hechas en clase/
+drive/
+*.tmp

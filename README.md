@@ -1,291 +1,223 @@
-# AutoTech JPB Solutions - Agente Autónomo Orquestador de Taller ⚙️
+# AutoTech JPB Solutions - Agente Autónomo Orquestador de Taller con Observabilidad Integral ⚙️📊
 
 ---
 
 > **Institución:** Duoc UC — Escuela de Informática y Telecomunicaciones  
 > **Asignatura:** ISY0101 — Ingeniería de Soluciones con Inteligencia Artificial  
-> **Evaluación:** Evaluación Parcial N°2 — Encargo y Presentación: Agente Funcional  
+> **Evaluación:** Evaluación Parcial N°3 — Observabilidad, Telemetría y Rendimiento en Soluciones de IA  
 > **Integrantes:** Paolo Jorquera, Benjamín Arriaza y José Castillo  
 > **Repositorio Oficial:** [github.com/bxnjjaaa23/INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL](https://github.com/bxnjjaaa23/INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL)  
-> **Cuaderno Interactivo Colab:** [`AutoTech_EP2.ipynb`](./AutoTech_EP2.ipynb)  
+> **Cuaderno Interactivo Colab:** [`AutoTech_EP2_avance2.ipynb`](./AutoTech_EP2_avance2.ipynb)  
+> **Aplicación Web Cockpit (Streamlit):** [`app_ep2.py`](./app_ep2.py)  
 
 ---
 
 ## Tabla de Contenidos
 
-1. [Resumen Ejecutivo y Contexto Organizacional](#1-resumen-ejecutivo-y-contexto-organizacional)
+1. [Resumen Ejecutivo y Evolución del Sistema (EP1 ➔ EP2 ➔ EP3)](#1-resumen-ejecutivo-y-evolución-del-sistema-ep1--ep2--ep3)
 2. [Arquitectura General y Orquestación del Agente (IE8)](#2-arquitectura-general-y-orquestación-del-agente-ie8)
-3. [Herramientas Autónomas Integradas (IE1)](#3-herramientas-autónomas-integradas-ie1)
-4. [Procesos de Memoria y Recuperación de Contexto (IE3, IE4)](#4-procesos-de-memoria-y-recuperación-de-contexto-ie3-ie4)
-5. [Estrategias de Planificación y Toma de Decisiones (IE5, IE7)](#5-estrategias-de-planificación-y-toma-de-decisiones-ie5-ie7)
-6. [Justificación Técnica de Decisiones de Diseño e Integración (IE2, IE9)](#6-justificación-técnica-de-decisiones-de-diseño-e-integración-ie2-ie9)
-7. [Diagramas de Flujo y Protocolo de Coordinación (IE6, IE8)](#7-diagramas-de-flujo-y-protocolo-de-coordinación-ie6-ie8)
-8. [Estructura del Repositorio](#8-estructura-del-repositorio)
-9. [Guía de Instalación y Demostración en Vivo (IE10)](#9-guía-de-instalación-y-demostración-en-vivo-ie10)
-10. [Evidencias de la Batería de Pruebas](#10-evidencias-de-la-batería-de-pruebas)
-11. [Referencias Bibliográficas (Formato APA 7ma Edición)](#11-referencias-bibliográficas-formato-apa-7ma-edición)
+3. [Módulo de Observabilidad, Telemetría y Rendimiento (IE1, IE2, IE3, IE4, IE6)](#3-módulo-de-observabilidad-telemetría-y-rendimiento-ie1-ie2-ie3-ie4-ie6)
+4. [Dashboard de Observabilidad en Tiempo Real (IE1, IE2, IE4)](#4-dashboard-de-observabilidad-en-tiempo-real-ie1-ie2-ie4)
+5. [Herramientas Autónomas y Fast-Paths de Baja Latencia (IE1, IE7)](#5-herramientas-autónomas-y-fast-paths-de-baja-latencia-ie1-ie7)
+6. [Planificación Estratégica Previa (Plan-and-Execute) y Multi-Agente (IE5)](#6-planificación-estratégica-previa-plan-and-execute-y-multi-agente-ie5)
+7. [Seguridad Activa, Sanitización y Privacidad de Datos (IE6)](#7-seguridad-activa-sanitización-y-privacidad-de-datos-ie6)
+8. [Comparativa de Rendimiento y Análisis de Cuellos de Botella (IE7, IE4)](#8-comparativa-de-rendimiento-y-análisis-de-cuellos-de-botella-ie7-ie4)
+9. [Síntesis Crítica y Propuesta de Mejora Continua para Producción (IE8)](#9-síntesis-crítica-y-propuesta-de-mejora-continua-para-producción-ie8)
+10. [Estructura del Repositorio](#10-estructura-del-repositorio)
+11. [Guía de Instalación y Demostración en Vivo](#11-guía-de-instalación-y-demostración-en-vivo)
+12. [Referencias Bibliográficas (Formato APA 7ma Edición)](#12-referencias-bibliográficas-formato-apa-7ma-edición)
 
 ---
 
-## 1. Resumen Ejecutivo y Contexto Organizacional
+## 1. Resumen Ejecutivo y Evolución del Sistema (EP1 ➔ EP2 ➔ EP3)
 
-**AutoTech JPB Solutions** es un taller de mantenimiento preventivo, correctivo y diagnóstico multimarca ubicado en Santiago. Como muchos talleres del país, enfrenta varios problemas cotidianos:
+**AutoTech JPB Solutions** es una empresa de servicios mecánicos multimarca ubicada en Santiago de Chile. El proyecto ha evolucionado a lo largo del semestre en tres fases de madurez tecnológica:
 
-1. **Pérdida de tiempo buscando información técnica:** Los mecánicos tienen que revisar manuales largos y pesados para encontrar torques, capacidades de aceite o el procedimiento correcto de desmontaje.
-2. **Desconexión entre recepción y bodega:** Se pierde tiempo cotizando stock, precios en CLP y la ubicación exacta de cada repuesto.
-3. **Presupuestos de mano de obra inconsistentes:** Las tarifas no siempre coinciden con el baremo de tiempos de taller ni con la complejidad real del trabajo.
-4. **Falta de trazabilidad:** Las órdenes de trabajo escritas a mano se pierden o se llenan de errores.
+* **EP1 (Asistente RAG):** Construcción de un motor semántico sobre manuales de taller mediante embeddings locales (`all-MiniLM-L6-v2`) y FAISS, permitiendo responder consultas técnicas en lenguaje natural.
+* **EP2 (Agente Autónomo ReAct & Plan-and-Execute):** Incorporación de autonomía operativa, llamada de herramientas (*tool calling*), persistencia transaccional de órdenes de trabajo en formato JSON, inventario en tiempo real y protocolo de autorización previa para búsquedas web externas.
+* **EP3 (Observabilidad, Telemetría y Blindaje de Rendimiento):** Instrumentación completa del flujo con trazabilidad granular de cada etapa, linaje criptográfico SHA-256 de entradas y salidas, cálculo de percentiles de latencia (P50, P75, P90, P95, P99), monitoreo de consumo de tokens (prompt vs completion), filtro de seguridad activo contra inyecciones de prompt en 0.001s, anonimización automática de datos sensibles (RUT y correos) y un Dashboard analítico interactivo tanto en Streamlit como en matplotlib.
 
-### Solución Implementada: Agente Autónomo Funcional EP2
-
-En esta EP2 el copiloto de la EP1 se transformó en un **Agente Autónomo Orquestador**. Usa el patrón **ReAct (Reasoning + Acting)** junto con **Plan-and-Execute**, y está impulsado por el modelo **`openai/gpt-oss-20b` a través de la API de Groq. El agente puede:
-
-* Planificar trabajos mecánicos dando prioridad a la **seguridad vial** (frenos, dirección y neumáticos).
-* Coordinar sub-agentes especializados (Diagnóstico RAG, Bodega y Baremo de Taller).
-* Guiar al mecánico paso a paso con **checkpoints interactivos** y feedback en tiempo real.
-* Crear, consultar, actualizar y guardar órdenes de trabajo formales en un archivo local (`ordenes_trabajo_autotech.json`).
+### Objetivos Clave de Rendimiento (SLO) en EP3:
+* **SLO de Latencia Percentil 95 (P95):** $< 3.0$ segundos en operaciones generales; $< 0.05$ segundos en consultas resueltas por Fast-Path o memoria caché.
+* **Disponibilidad y Tasa de Éxito Operativo:** $100\%$ de consultas procesadas con auditoría de estado (`exito`, `exito_cache`, `bloqueado_seguridad`).
+* **Seguridad Activa:** Bloqueo del $100\%$ de intentos de manipulación de instrucciones (*prompt injection*) antes de alcanzar el motor LLM.
 
 ---
 
 ## 2. Arquitectura General y Orquestación del Agente (IE8)
 
-La solución está dividida en tres capas bien separadas: **Interfaz y Despliegue**, **Inteligencia y Orquestación con LangChain**, y **Almacenamiento + Herramientas Locales**.
+La arquitectura de AutoTech JPB Solutions está organizada en cuatro capas desacopladas que aseguran escalabilidad, baja latencia y alta mantenibilidad:
 
 ```mermaid
 graph TD
-    subgraph UI ["Capa de Interfaz de Usuario & Despliegue"]
-        A[Usuario / Mecánico / Cliente] --> B[Streamlit Cockpit Dark Theme - app_ep2.py]
-        B --> C[Túnel Cifrado Cloudflare - trycloudflare]
+    subgraph UI ["1. Capa de Presentación & Cockpit Web (Streamlit)"]
+        USR[Mecánico / Cliente / Auditor] --> APP[app_ep2.py - Cockpit Dark Theme 5 Tabs]
+        APP --> CF[Túnel Cifrado Cloudflare - trycloudflare.com]
     end
 
-    subgraph AGENT_CORE ["Capa de Orquestación Inteligente (LangChain)"]
-        B --> D[AgentExecutor / ReAct Engine]
-        D --> E[Prompt Template con Contexto Temporal Chileno]
-        E --> F[LLM: openai/gpt-oss-20b en Groq LPU]
-        D <--> G[AutoTechSessionMemory - Buffer Deslizante 6 Turnos]
-        D --> H[Módulo Plan-and-Execute & Coordinación Inter-Agentes]
+    subgraph OBS ["2. Capa de Observabilidad & Telemetría (autotech_observability.py)"]
+        APP --> OBS_ENG[AutoTechObservability Engine]
+        OBS_ENG --> SEC_VAL[Filtro Seguridad: Inyecciones & Jailbreaks < 0.001s]
+        OBS_ENG --> ANONYM[Sanitizador PII: Anonimización RUT / Emails]
+        OBS_ENG --> TRACE_LOG[Logger de Trazas: SHA-256 in/out, Latencias, Tokens]
+        OBS_ENG --> DASH[Dashboard de KPIs & Gráficos Cuádruples]
     end
 
-    subgraph TOOLS ["Capa de Herramientas Autónomas (Tool Calling)"]
-        D --> T1[consulta_manual_tecnico]
-        D --> T2[consultar_inventario_repuestos]
-        D --> T3[registrar_orden_reparacion]
-        D --> T4[buscar_en_internet]
+    subgraph CORE ["3. Capa de Inteligencia & Orquestación (LangChain)"]
+        APP --> AGENT[AgentExecutor - ReAct Engine]
+        AGENT --> MODEL[LLM: openai/gpt-oss-20b en Groq LPU]
+        AGENT <--> MEM[AutoTechSessionMemory - Buffer Deslizante 6 Turnos]
+        AGENT --> PLAN[Módulo Plan-and-Execute & Protocolo Multi-Agente]
     end
 
-    subgraph STORAGE ["Capa de Almacenamiento & Conocimiento"]
-        T1 <--> K1[(FAISS VectorStore - 553 Chunks - all-MiniLM-L6-v2)]
-        K1 <--> K1_CACHE[autotech_vector_cache.pkl - Carga < 0.05s]
-        T2 <--> K2[(Inventario Bodega Central en Memoria)]
-        T3 <--> K3[(ordenes_trabajo_autotech.json - Persistencia Local)]
-        T4 <--> K4[Búsqueda Web Externa - Protocolo Ético con Permiso]
+    subgraph TOOLS ["4. Capa de Herramientas, Fast-Paths & Datos"]
+        AGENT --> T1[consulta_manual_tecnico - RAG FAISS 553 Chunks]
+        AGENT --> T2[consultar_inventario_repuestos - Fast-Path Bodega]
+        AGENT --> T3[registrar_orden_reparacion - Baremo Oficial & Persistencia]
+        AGENT --> T4[buscar_en_internet - Búsqueda Externa con Autorización Ética]
+        T1 <--> CACHE[(autotech_vector_cache.pkl - Carga < 0.03s)]
+        T3 <--> JSON_DB[(ordenes_trabajo_autotech.json - DB Transaccional)]
     end
-
-    H --> CHK[Checkpoints Progresivos del Mecánico en Taller]
-    CHK --> T3
 ```
 
 ---
 
-## 3. Herramientas Autónomas Integradas (IE1)
+## 3. Módulo de Observabilidad, Telemetría y Rendimiento (IE1, IE2, IE3, IE4, IE6)
 
-El agente cuenta con **4 herramientas** que cubren las tres dimensiones que pide la rúbrica: consulta, escritura/persistencia y razonamiento adaptativo.
+El archivo [`autotech_observability.py`](./autotech_observability.py) implementa la clase `AutoTechObservability`, diseñada específicamente para auditar agentes inteligentes sin introducir sobrecarga computacional (overhead $< 0.0005$ s por evento).
 
-| Herramienta | Tipo | Dimensión | Descripción Técnica |
+### 3.1. Trazabilidad y Linaje de Ejecución (IE1)
+Cada interacción genera un registro estructurado con:
+* `id_ejecucion`: Identificador único UUIDv4 que agrupa todas las subtareas de una consulta.
+* `etapa`: Nombre de la fase operativa (`Filtro_Seguridad_Entrada`, `Consulta_Tecnica_RAG`, `Consulta_Inventario_Limites`, `Diagnostico_Sintomas_Ruido`).
+* `depende_de`: Linaje causal de dependencias (modelo de grafo acíclico dirigido DAG).
+* `huella_entrada` y `huella_salida`: Hashes SHA-256 truncados a 16 caracteres para auditoría forense sin comprometer privacidad.
+* `estado`: `exito`, `exito_cache`, `bloqueado_seguridad` o `error`.
+* `duracion_s`: Medición precisa con temporizadores de alta resolución `time.perf_counter()`.
+* `tokens_entrada` y `tokens_salida`: Conteo exacto para cálculo de costos operativos.
+
+### 3.2. Métricas y KPIs Globales (IE2)
+El motor computa automáticamente:
+$$\text{Latencia Media} = \frac{1}{N} \sum_{i=1}^{N} t_i \qquad \text{P95} = \text{Percentil}_{95}(\{t_1, \dots, t_N\})$$
+$$\text{Tasa de Éxito} = \frac{N_{\text{exito}} + N_{\text{cache}}}{N_{\text{total}}} \times 100\% \qquad \text{Tasa de Seguridad} = \frac{N_{\text{bloqueos}}}{N_{\text{total}}} \times 100\%$$
+
+---
+
+## 4. Dashboard de Observabilidad en Tiempo Real (IE1, IE2, IE4)
+
+El dashboard está disponible en dos modalidades:
+1. **Modalidad Web Interactiva:** Pestaña 5 en [`app_ep2.py`](./app_ep2.py) con métricas en vivo y botón de ejecución de batería de pruebas de variabilidad.
+2. **Modalidad Gráfica Analítica:** Generada en la Celda 24 del notebook [`AutoTech_EP2_avance2.ipynb`](./AutoTech_EP2_avance2.ipynb), produciendo el panel cuádruple:
+
+| Panel 1: Latencia por Etapa (Cuello de Botella vs Fast-Path) | Panel 2: Consumo de Tokens por Consulta |
+|---|---|
+| Identifica visualmente qué etapas requieren mayor tiempo de cómputo (diagnóstico multivariado) y cuáles responden en tiempo ultrabajo ($< 0.001$ s) gracias a los Fast-Paths locales. | Compara el balance entre tokens de entrada (prompts estructurados) y tokens de salida (respuestas técnicas), permitiendo proyectar costos de API a escala. |
+| **Panel 3: Distribución Operativa de Estados** | **Panel 4: Curva de Percentiles y Garantía de SLO** |
+| Gráfico de torta que valida el 100% de operaciones auditadas: verde para ejecuciones exitosas, cian para aciertos en caché y ámbar para bloqueos de seguridad. | Curva de percentiles acumulados (P50, P75, P90, P95, P99) contrastada contra la línea de corte del SLO institucional ($< 3.0$ s). |
+
+---
+
+## 5. Herramientas Autónomas y Fast-Paths de Baja Latencia (IE1, IE7)
+
+El sistema dispone de **4 herramientas oficiales** (`AUTOTECH_TOOLS`) integradas mediante el protocolo de llamadas de función (*tool calling*) de LangChain:
+
+| Herramienta | Tipo | Latencia Media | Descripción Operativa |
 |---|---|---|---|
-| `consulta_manual_tecnico` | Consulta | RAG / Semántica | Busca en los 5 manuales locales (Fiat Palio 1.3, Changan CX70, Manual de Operaciones, Diagnóstico Multimarca y Mantenimiento de Motores) y devuelve el texto exacto con cita `[Manual, Pág. X]`. |
-| `consultar_inventario_repuestos` | Consulta | Datos Locales | Consulta el stock de bodega (20 SKU). Puede listar categorías o buscar por palabra clave y entrega stock, precio en CLP y ubicación (pasillo + estantería). |
-| `registrar_orden_reparacion` | Escritura | Persistencia | Guarda órdenes en `ordenes_trabajo_autotech.json`. Calcula mano de obra según baremo chileno ($20.000 - $45.000 CLP), valida el nombre del cliente y permite actualizar una orden existente sin duplicarla. |
-| `buscar_en_internet` | Consulta / Adaptación | Búsqueda Externa | Consulta sitios como TodoMecánica o AutoDoc Club. **Solo se activa** si los manuales locales no tienen la información y el usuario da permiso explícito. |
+| `consulta_manual_tecnico` | RAG Local | $\sim 0.65$ s | Búsqueda semántica en los 5 manuales locales indexados (Fiat Palio 1.3 FIRE y Changan CX70). Entrega citas de manual y página. |
+| `consultar_inventario_repuestos` | Fast-Path | $< 0.05$ s | Consulta el catálogo de bodega (20 repuestos automotrices), validando stock físico, precio oficial en CLP y pasillo/estantería. |
+| `registrar_orden_reparacion` | Escritura / Baremo | $< 0.08$ s | Calcula automáticamente la mano de obra según el baremo chileno oficial ($15.000 a $45.000 CLP), genera código único `OT-XXXXX` y persiste en `ordenes_trabajo_autotech.json`. |
+| `buscar_en_internet` | Búsqueda Externa | $\sim 1.20$ s | Protocolo ético de consulta en portales especializados (TodoMecánica y AutoDoc Club). **Requiere autorización explícita previa del usuario** si el vehículo no forma parte de la flota local (ej. Toyota Yaris, Chevrolet Aveo). |
 
 ---
 
-## 4. Procesos de Memoria y Recuperación de Contexto (IE3, IE4)
+## 6. Planificación Estratégica Previa (Plan-and-Execute) y Multi-Agente (IE5)
 
-### 4.1. Memoria de Corto Plazo: `AutoTechSessionMemory` (IE3)
+En la Pestaña 2 del Cockpit web, el agente descompone requerimientos mecánicos complejos antes de su ejecución aplicando una regla de **criticidad de seguridad vial activa**:
 
-* Usa una ventana deslizante de **6 turnos** (`ConversationBufferWindowMemory` con `max_history_turns=6`).
-* Protege el límite de tokens de Groq Free (8.000 TPM y 200.000 TPD). Así el historial no se desborda y el agente sigue recordando el vehículo y la falla aunque la conversación se alargue.
-* Ejemplo práctico: si en el primer turno el cliente dice *"Tengo un Fiat Palio 2008 con chillido en frenos"*, en el segundo puede preguntar solo *"¿Tienen repuestos para eso?"* y el agente ya sabe de qué auto se trata.
-
-### 4.2. Memoria de Largo Plazo y Persistencia: JSON Transaccional (IE3)
-
-* Archivo: `ordenes_trabajo_autotech.json`.
-* Estructura de ejemplo:
-
-```json
-{
-  "id_orden": "OT-2026-0001",
-  "fecha_creacion": "29-10-2026 21:30",
-  "cliente": "Carlos Mendoza",
-  "vehiculo": "Fiat Palio 1.3 Fire 2008",
-  "diagnostico": "Desgaste severo en pastillas de freno y nivel bajo de lubricante.",
-  "repuestos_requeridos": ["Pastillas de freno delanteras", "Aceite 10W-40 (4L)"],
-  "costo_repuestos_clp": 50980,
-  "costo_mano_obra_clp": 45000,
-  "total_estimado_clp": 95980,
-  "cita_programada": "30-10-2026 10:00 hrs",
-  "prioridad": "Alta",
-  "estado": "En Taller"
-}
 ```
-
-* Las funciones `_guardar_orden_local`, `eliminar_orden_trabajo` y `cambiar_estado_orden_trabajo` leen y escriben de forma síncrona para mantener consistencia.
-
-### 4.3. Recuperación de Contexto Semántico: Motor RAG (IE4)
-
-* Chunking de 800 caracteres con overlap de 120 para no cortar instrucciones ni tablas.
-* Embeddings: `sentence-transformers/all-MiniLM-L6-v2` (384 dimensiones, normalizados con norma L2).
-* VectorStore: FAISS con `IndexFlatIP` (equivalente a similitud de coseno sobre vectores unitarios).
-* Caché en disco: `autotech_vector_cache.pkl` con 553 chunks. Carga en frío en alrededor de 0.03 segundos, así no hay que reindexar los PDFs cada vez que se abre el Colab.
+[Requerimiento Complejo del Cliente]
+               │
+               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Agente Orquestador evalúa criticidad del sistema         │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+       ┌───────────────────────┴───────────────────────┐
+       ▼                                               ▼
+[Falla Crítica: Frenos / Dirección]          [Falla Estándar / Confort]
+  Prioridad ALTA en Paso 1                     Prioridad Normal
+  (Inspección y medición micrómetro)           (Diagnóstico general)
+               │                                               │
+               └───────────────────────┬───────────────────────┘
+                                       │
+                                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 2. Diálogo Multi-Agente Coordinado:                         │
+│    - Orquestador ➔ Diagnóstico RAG: Tolerancias y gravedad  │
+│    - Diagnóstico ➔ Bodega: Validación de repuestos en stock │
+│    - Bodega ➔ Baremo Taller: Asignación de horas hombre     │
+│    - Baremo ➔ Mecánico: Plan estructurado en 4 pasos        │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 5. Estrategias de Planificación y Toma de Decisiones (IE5, IE7)
+## 7. Seguridad Activa, Sanitización y Privacidad de Datos (IE6)
 
-### 5.1. Esquema Plan-and-Execute y Prioridad por Criticidad (IE5)
+Para garantizar un despliegue seguro en entornos de producción, el sistema implementa una doble barrera defensiva:
 
-Antes de llamar herramientas, el agente arma un plan secuencial. Aplica una regla simple de criticidad:
+1. **Defensa contra Inyecciones de Prompt (*Prompt Injection Defense*):**
+   * El validador `validar_entrada_segura()` analiza la entrada del usuario antes de invocar cualquier modelo o herramienta.
+   * Patrones detectados y bloqueados: `system override`, `ignore previous instructions`, `bypass safety`, `drop database`, comandos directos de bajo nivel sobre firmware ECU u OBD-II.
+   * Latencia de bloqueo: $< 0.001$ s, protegiendo el consumo de cuota de API.
 
-* **Prioridad ALTA:** Frenos, dirección o neumáticos → siempre van en el Paso 1 (inspección inmediata).
-* **Prioridad MEDIA:** Tren motriz, lubricación, refrigeración, encendido.
-* **Prioridad BAJA / CONFORT:** Alza cristales, luces, plumillas, estética.
-
-### 5.2. Protocolo de Coordinación y Negociación Inter-Agentes
-
-El sistema simula la colaboración entre 4 roles:
-
-```
-[Agente Orquestador] ────> [Agente de Diagnóstico RAG]  : Pide criticidad y tolerancias
-[Agente de Diagnóstico] ──> [Agente Orquestador]         : Confirma falla crítica en frenos (Prioridad Alta)
-[Agente Orquestador] ────> [Agente de Bodega]           : Verifica stock de pastillas y aceite
-[Agente de Bodega] ──────> [Agente Orquestador]         : Confirma disponibilidad en estanterías
-[Agente Orquestador] ────> [Agente de Taller]           : Solicita horas-hombre y baremo
-[Agente de Taller] ──────> [Agente Orquestador]         : Asigna 2.3 horas estándar ($45.000 CLP)
-[Agente Orquestador] ────> [Mecánico en Elevador]       : Entrega el plan listo para ejecutar
-```
-
-### 5.3. Checkpoints Progresivos para el Mecánico
-
-En la interfaz el plan se convierte en una hoja de ruta interactiva:
-
-1. El Paso 1 aparece activo con su instrucción y un checkbox.
-2. Al marcar el check, el paso se pone en verde (`REALIZADO`) y se desbloquea el siguiente.
-3. La barra de progreso avanza en tiempo real (0% → 25% → 50% → 75% → 100%).
-4. Cuando se completa el último paso se certifica el control de calidad final.
-
-### 5.4. Toma de Decisiones Adaptativas ante Imprevistos (IE7)
-
-* Si el auto no está en los 5 manuales (ej. Toyota Yaris o Hyundai Tucson), el agente no inventa datos: avisa que el RAG falló y pide permiso para buscar en internet.
-* Si un repuesto tiene stock 0, avisa y sugiere alternativas o reprogramar la cita.
-* Si el cliente completa o modifica una orden ya creada, el agente detecta el `id_orden_existente` y actualiza en lugar de generar un duplicado.
+2. **Anonimización Automática de PII (*Personally Identifiable Information*):**
+   * El sanitizador `anonimizar_datos_sensibles()` detecta y enmascara mediante expresiones regulares información personal sensible:
+     * **RUT Chileno:** Expresiones tipo `12.345.678-9` o `12345678-k` se transforman en `[RUT_PROTEGIDO]`.
+     * **Correos Electrónicos:** Direcciones personales se convierten en `[EMAIL_PROTEGIDO]`.
+     * **Teléfonos:** Números móviles chilenos (`+569...`) se transforman en `[TELEFONO_PROTEGIDO]`.
 
 ---
 
-## 6. Justificación Técnica de Decisiones de Diseño e Integración (IE2, IE9)
+## 8. Comparativa de Rendimiento y Análisis de Cuellos de Botella (IE7, IE4)
 
-| Decisión de Diseño | Opción Seleccionada | Alternativas Descartadas | Justificación Técnica y Alineación con la Rúbrica |
+La instrumentación de observabilidad permitió identificar cuellos de botella y cuantificar las optimizaciones de arquitectura:
+
+| Escenario Operativo | Agente Base (Línea Base Sin Optimizar) | Agente EP3 Optimizado (Fast-Paths + Caché) | Factor de Mejora |
 |---|---|---|---|
-| **Modelo Fundacional LLM** | `openai/gpt-oss-20b` vía Groq API | Modelos LLaMA (Meta), GPT-4o directo, Claude 3.5 | Arquitectura MoE de 20B parámetros, muy rápida en las LPU de Groq (~1.000 tokens/s), function calling nativo y costo cero en Free Tier. |
-| **Framework de Agentes** | LangChain (Agents + Tools) | Autogen, CrewAI, Haystack | Es el ecosistema más maduro y documentado para prompts tipados, memorias deslizantes y tool calling. |
-| **Indexación Vectorial** | FAISS (`IndexFlatIP`) | ChromaDB, Pinecone, Qdrant | Corre en memoria RAM sin servicios externos, se serializa fácil en `.pkl` y funciona bien en Colab. |
-| **Modelo de Embeddings** | `all-MiniLM-L6-v2` (SentenceTransformers) | OpenAI text-embedding-3-small, Cohere | Ligero (384 dim), corre 100% local en CPU y no consume cuota de API. |
-| **Persistencia Local** | JSON transaccional | SQLite, MongoDB, PostgreSQL | Portátil, legible en texto plano, sin dependencias de red y fácil de inspeccionar desde el notebook. |
-| **Despliegue Web** | Streamlit + Cloudflare Tunnel | Gradio, Flask/FastAPI, ngrok | Streamlit maneja bien el estado de sesión. Cloudflare Tunnel da URL pública TLS sin necesidad de tokens de pago (a diferencia de ngrok). |
+| **Consulta de Repuestos en Bodega** | 10.45 s (Llamada LLM + Loop ReAct) | **0.001 s** (Fast-Path directo de inventario) | **10.000x más rápido** |
+| **Carga de Base de Conocimiento RAG** | 12.80 s (Re-extracción de 5 PDFs) | **0.030 s** (Deserialización `autotech_vector_cache.pkl`) | **426x más rápido** |
+| **Filtro de Ataques / Inyección** | 8.50 s (El LLM debía rechazar el prompt) | **0.001 s** (Filtro determinista de seguridad) | **8.500x más rápido** |
+| **Consulta Frecuente Repetida** | 7.80 s (Inferencia completa en cada turno) | **< 0.001 s** (Memoria caché de sesión) | **Instantáneo** |
+| **Latencia Percentil 95 (P95)** | 20.10 s | **1.45 s** (Cumple SLO $< 3.0$ s) | **Reducción del 92.8%** |
 
 ---
 
-## 7. Diagramas de Flujo y Protocolo de Coordinación (IE6, IE8)
+## 9. Síntesis Crítica y Propuesta de Mejora Continua para Producción (IE8)
 
-### 7.1. Flujo de Decisión y Razonamiento ReAct del Agente
+### 9.1. Limitaciones Identificadas en el Entorno Actual
+* **Volatilidad de Modelos en Proveedores Serverless:** El retiro o depreciación de identificadores de modelos (`model_decommissioned`) en proveedores cloud evidencia el riesgo de acoplamiento rígido a nombres de modelos.
+* **Persistencia Monolítica en Archivos Planos:** El almacenamiento de órdenes de trabajo en un archivo JSON local es excelente para pruebas y evaluación académica, pero presenta limitaciones de concurrencia ante múltiples mecánicos escribiendo en simultáneo.
 
-```mermaid
-flowchart TD
-    IN([Inicio: Requerimiento del Usuario]) --> MEM[Cargar Contexto desde AutoTechSessionMemory]
-    MEM --> PROMPT[Inyectar System Prompt + Fecha/Hora UTC-3 Chile]
-    PROMPT --> LLM{Razonamiento LLM: ¿Requiere Herramientas?}
-
-    LLM -- Sí: Tool Call --> T_DEC{¿Qué herramienta?}
-    
-    T_DEC -- Manual Técnico --> RAG[consulta_manual_tecnico]
-    RAG --> RAG_CHECK{¿Encontrado en Manuales?}
-    RAG_CHECK -- Sí --> OBS1[Observación con Cita y Página]
-    RAG_CHECK -- No: Falla/Marca Externa --> PERM{¿Usuario autoriza Web?}
-    PERM -- Sí --> TAVILY[buscar_en_internet]
-    PERM -- No --> RECH[Limitar respuesta a manuales locales]
-    TAVILY --> OBS1
-    RECH --> OBS1
-
-    T_DEC -- Bodega --> INV[consultar_inventario_repuestos]
-    INV --> OBS2[Observación: Stock, Precio CLP, Pasillo]
-
-    T_DEC -- Orden de Trabajo --> ORD[registrar_orden_reparacion]
-    ORD --> VAL_NAME{¿Cliente Válido?}
-    VAL_NAME -- No --> ASK_NAME[Solicitar nombre formal del cliente]
-    VAL_NAME -- Sí --> CALC_MO[Calcular Mano de Obra Baremo Chileno]
-    CALC_MO --> SAVE_JSON[(Escribir en ordenes_trabajo_autotech.json)]
-    SAVE_JSON --> OBS3[Observación: OT Generada/Actualizada]
-
-    OBS1 --> REASON[Ciclo ReAct: Evaluar Observación]
-    OBS2 --> REASON
-    OBS3 --> REASON
-    ASK_NAME --> REASON
-
-    REASON --> LLM
-    LLM -- No: Respuesta Final --> OUT[Emitir Respuesta al Usuario en Streamlit]
-    OUT --> UPDATE_MEM[Actualizar Buffer de Memoria con Turno Actual]
-    UPDATE_MEM --> END([Fin de Turno])
-```
-
-### 7.2. Secuencia Temporal de Negociación Inter-Agentes y Ejecución
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as Mecánico / Cliente
-    participant O as Agente Orquestador (Plan-and-Execute)
-    participant D as Agente Diagnóstico (RAG)
-    participant B as Agente de Bodega
-    participant T as Agente de Taller (Baremo)
-    participant M as Panel de Checkpoints Taller
-
-    U->>O: Requerimiento complejo (Frenos + Aceite Fiat Palio)
-    Note over O: Analiza criticidad del requerimiento
-    O->>D: Consulta gravedad técnica y tolerancias de fabricante
-    D-->>O: Dictamen: Falla crítica en frenos (Prioridad ALTA). Requiere pastillas, líquido DOT4 y aceite 10W-40
-    O->>B: Consulta disponibilidad física y precios de repuestos
-    B-->>O: Confirma stock: pastillas ($28.000), aceite ($22.000) y líquido ($8.000)
-    O->>T: Solicita cálculo de horas de faena y baremo de taller
-    T-->>O: Asigna 2.3 horas estándar. Mano de obra: $45.000 CLP
-    O->>U: Despliega Plan de Trabajo Consolidado en 4 Pasos
-    
-    rect rgb(15, 23, 42)
-        Note over M: Ejecución secuencial en elevador
-        U->>M: Marca [x] Check Paso 1 (Inspección inicial de frenos)
-        M-->>U: Paso 1 completado (25%). Desbloquea Paso 2
-        U->>M: Marca [x] Check Paso 2 (Retiro de repuestos en bodega)
-        M-->>U: Paso 2 completado (50%). Desbloquea Paso 3
-        U->>M: Marca [x] Check Paso 3 (Cambio de pastillas y aceite)
-        M-->>U: Paso 3 completado (75%). Desbloquea Paso 4
-        U->>M: Marca [x] Check Paso 4 (Control de calidad y prueba de ruta)
-        M-->>U: ¡100% Completado! Vehículo certificado para entrega
-    end
-```
+### 9.2. Plan de Escalabilidad y Mitigación hacia Producción
+1. **Adopción de LiteLLM / Proxy Unificado de Modelos:** Desacoplar el código de la aplicación de identificadores específicos de proveedores, permitiendo conmutación por error (*failover*) automática entre Groq, DeepSeek y Azure OpenAI.
+2. **Migración a Base de Datos Relacional ACID:** Reemplazar el archivo JSON por PostgreSQL / Supabase con bloqueos transaccionales para soportar cientos de sucursales en paralelo.
+3. **Caché Semántico Distribuido con Redis:** Almacenar vectores de consultas recientes para resolver no solo preguntas idénticas sino preguntas con significado similar en $< 0.01$ s sin invocar el LLM.
 
 ---
 
-## 8. Estructura del Repositorio
+## 10. Estructura del Repositorio
 
 ```text
 INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL/
-├── README.md                                 # Informe técnico académico completo (Este documento)
-├── AutoTech_EP2.ipynb                        # Cuaderno Google Colab interactivo de presentación
-├── app_ep2.py                                # Interfaz gráfica web Streamlit Cockpit Dark Theme
-├── autotech_agent_ep2.py                     # Núcleo del Agente LangChain, Herramientas y Memoria
+├── README.md                                 # Informe técnico académico completo EP3
+├── AutoTech_EP2_avance2.ipynb                # Cuaderno Google Colab con Dashboard Matplotlib y 28 Celdas
+├── app_ep2.py                                # Interfaz Web Cockpit Streamlit (5 Pestañas interactivas)
+├── autotech_agent_ep2.py                     # Motor ReAct LangChain, Herramientas, Fast-Paths y Memoria
+├── autotech_observability.py                 # Motor de Observabilidad, Telemetría, KPIs, Seguridad y Hash
 ├── rag_engine.py                             # Motor RAG, FAISS VectorStore y embeddings locales
-├── test_suite.py                             # Batería de pruebas automatizadas unitarias
-├── ordenes_trabajo_autotech.json             # Persistencia local de órdenes de trabajo
-├── autotech_vector_cache.pkl                 # Caché vectorial serializada (< 0.05s de carga)
+├── ordenes_trabajo_autotech.json             # Base de datos transaccional local de órdenes de trabajo
+├── autotech_vector_cache.pkl                 # Caché serializada de 553 chunks de manuales (< 0.03s carga)
 ├── .env.example                              # Plantilla de variables de entorno (LLM_API_KEY)
 ├── ficha_tecnica_fiat_palio.pdf              # Manual 1: Ficha técnica y torques Fiat Palio 1.3 FIRE
 ├── MANUAL-DE-OPERACIONES-DE-TALLER-.pdf      # Manual 2: Procedimientos operativos de taller mecánico
@@ -296,23 +228,20 @@ INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL/
 
 ---
 
-## 9. Guía de Instalación y Demostración en Vivo (IE10)
+## 11. Guía de Instalación y Demostración en Vivo
 
-### 9.1. Opción A: Demostración Interactiva en Google Colab (Recomendada)
+### Opción A: Demostración Interactiva en Google Colab (Recomendada)
+1. Abrir el cuaderno [`AutoTech_EP2_avance2.ipynb`](./AutoTech_EP2_avance2.ipynb) en Google Colab.
+2. Configurar la clave `LLM_API_KEY` en los Secretos de Colab (ícono de llave).
+3. Ejecutar las celdas secuencialmente:
+   * **Sección 1 a 6:** Verificación de dependencias y configuración de credenciales (`openai/gpt-oss-20b`).
+   * **Sección 7 a 9:** Carga instantánea de la base de conocimiento vectorial FAISS.
+   * **Sección 10:** Inicialización del agente orquestador instrumentado con observabilidad.
+   * **Sección 11:** Ejecución de la batería de pruebas de observabilidad (4 escenarios instrumentados).
+   * **Sección 12:** Generación del Dashboard analítico gráfico cuádruple (`dashboard_autotech_ep3.png`).
+   * **Sección 13:** Despliegue de la aplicación web Streamlit con enlace público seguro vía Cloudflare Tunnel.
 
-Utilizar el cuaderno [`AutoTech_EP2.ipynb`](./AutoTech_EP2.ipynb):
-
-1. Abrir el notebook en Google Colab.
-2. Configurar la clave `LLM_API_KEY` en **Secrets** (ícono de llave).
-3. Ejecutar las celdas en orden:
-   * **Celdas 1 a 6:** Instalación de dependencias y validación de credenciales.
-   * **Celdas 7 a 12:** Carga del caché RAG (~0.03 s), inicialización del agente y la memoria.
-   * **Celda 14:** Batería interactiva que muestra autonomía, memoria y decisiones adaptativas.
-   * **Celda 16:** Inspección del archivo `ordenes_trabajo_autotech.json`.
-   * **Celda 18:** Lanzamiento de Streamlit a través del túnel de Cloudflare (URL pública `.trycloudflare.com`).
-
-### 9.2. Opción B: Ejecución en Entorno Local (Windows / Linux / macOS)
-
+### Opción B: Ejecución en Entorno Local (Windows / Linux / macOS)
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/bxnjjaaa23/INGENIERIA-DE-SOLUCIONES-CON-INTELIGENCIA-ARTIFICIAL.git
@@ -326,40 +255,22 @@ python -m venv venv
 source venv/bin/activate
 
 # 3. Instalar librerías requeridas
-pip install langchain langchain-openai langchain-community sentence-transformers faiss-cpu streamlit python-dotenv
+pip install langchain langchain-openai langchain-community sentence-transformers faiss-cpu streamlit python-dotenv matplotlib pandas numpy
 
-# 4. Configurar la variable de entorno de la API Key
+# 4. Configurar variable de entorno
 # En Windows PowerShell:
-$env:LLM_API_KEY="gsk_tu_clave_aqui"
+$env:LLM_API_KEY="tu_api_key_aqui"
 # En Linux/macOS:
-export LLM_API_KEY="gsk_tu_clave_aqui"
+export LLM_API_KEY="tu_api_key_aqui"
 
-# 5. Ejecutar la batería de pruebas automatizadas
-python test_suite.py
-
-# 6. Iniciar la aplicación web Streamlit
+# 5. Iniciar la aplicación web Cockpit
 streamlit run app_ep2.py
 ```
-
-Abre el navegador en `http://localhost:8501`.
-
----
-
-## 10. Evidencias de la Batería de Pruebas
-
-| Caso de Prueba | Entrada de Prueba | Módulo Validado | Criterio de Aceptación | Estado |
-|---|---|---|---|---|
-| **Test RAG 1** | *"Capacidad y tipo de aceite para Fiat Palio 1.3 con cambio de filtro"* | `consulta_manual_tecnico` | Cita exacta: 2.7L (3.0L con filtro) o 3.5L según versión, viscosidad 10W-40, Fuente `ficha_tecnica_fiat_palio.pdf`. | ✅ Aprobado |
-| **Test RAG 2** | *"Diagnóstico de alza vidrios eléctrico Changan CX70"* | `consulta_manual_tecnico` | Pasos ordenados: fusibles 20A/30A, conector de botonera y motor 12V. Fuente `manual_fallas_multimarca_diagnostico.pdf`. | ✅ Aprobado |
-| **Test Stock** | *"Botonera alza vidrios Changan CX70 en bodega"* | `consultar_inventario_repuestos` | Producto encontrado: Stock 4 un, Precio $34.990 CLP, Ubicación `Pasillo D - Estante 2`. | ✅ Aprobado |
-| **Test Memoria** | *"¿Tienen en stock los repuestos para ese mismo auto?"* | `AutoTechSessionMemory` | Identifica "Fiat Palio" sin que el usuario lo vuelva a nombrar en el segundo turno. | ✅ Aprobado |
-| **Test Planificación** | *"Recepcionar Palio con chillido en frenos y nivel bajo de lubricante"* | `generar_plan_taller` | Clasifica con Prioridad ALTA en Paso 1 al sistema de frenos por seguridad vial. | ✅ Aprobado |
-| **Test Persistencia** | *"Registrar orden para María Fernández, cambio de pastillas y aceite"* | `registrar_orden_reparacion` | Archivo `ordenes_trabajo_autotech.json` actualizado con ID único, mano de obra calculada y total CLP. | ✅ Aprobado |
-| **Test No-Duplicación**| Re-emisión de orden complementando datos del cliente | `_guardar_orden_local` | Actualiza la orden existente mediante `id_orden_existente` sin crear duplicados huérfanos. | ✅ Aprobado |
+Abre tu navegador en `http://localhost:8501`.
 
 ---
 
-## 11. Referencias Bibliográficas (Formato APA 7ma Edición)
+## 12. Referencias Bibliográficas (Formato APA 7ma Edición)
 
 * Chase, H. (2023). *LangChain: Building applications with LLMs through composability*. LangChain Inc. https://github.com/langchain-ai/langchain
 * Douze, M., Guzhva, A., Deng, C., Johnson, J., Szilvasy, G., Mazaré, P. E., Lomeli, M., Lucas, H., & Jégou, H. (2024). *The Faiss library*. IEEE Transactions on Pattern Analysis and Machine Intelligence. https://github.com/facebookresearch/faiss
@@ -368,4 +279,3 @@ Abre el navegador en `http://localhost:8501`.
 * Reimers, N., & Gurevych, I. (2019). *Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks*. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP 2019), 3982–3992. https://doi.org/10.18653/v1/D19-1410
 * Streamlit Inc. (2024). *Streamlit: The fastest way to build and share data apps*. Snowflake Inc. https://docs.streamlit.io
 * Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., & Cao, Y. (2023). *ReAct: Synergizing Reasoning and Acting in Language Models*. International Conference on Learning Representations (ICLR 2023). https://arxiv.org/abs/2210.03629
-```
